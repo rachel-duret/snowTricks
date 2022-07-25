@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Tricks!
+{% endblock %}
+
+{% block body %}
+	{% if tricks %}
+		{% for trick in tricks %}
+			<h1>{{trick.title}}</h1>
+			<p>{{trick.description}}</p>
+
+		{% endfor %}
+	{% endif %}
+
+
+{% endblock %}

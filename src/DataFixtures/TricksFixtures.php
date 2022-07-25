@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Trick;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,8 +14,7 @@ class TricksFixtures extends Fixture
        $trick = new Trick();
        $trick->setTitle('test');
        $trick->setDescription('This a trick for kid');
-    
-
         $manager->persist($trick);
+        $manager->flush();
     }
 }
