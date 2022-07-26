@@ -30,7 +30,7 @@ class User
     #[ORM\Column]
     private ?bool $isAdmin = null;
 
-    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Trick::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
     private Collection $tricks;
 
     public function __construct()
@@ -115,7 +115,7 @@ class User
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->setUserId($this);
+            $trick->setUser($this);
         }
 
         return $this;
@@ -125,8 +125,8 @@ class User
     {
         if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($trick->getUserId() === $this) {
-                $trick->setUserId(null);
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
             }
         }
 

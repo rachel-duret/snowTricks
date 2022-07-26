@@ -18,7 +18,7 @@ class Type
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'typeId', targetEntity: Trick::class)]
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Trick::class)]
     private Collection $tricks;
 
     public function __construct()
@@ -55,7 +55,7 @@ class Type
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->setTypeId($this);
+            $trick->setType($this);
         }
 
         return $this;
@@ -65,8 +65,8 @@ class Type
     {
         if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($trick->getTypeId() === $this) {
-                $trick->setTypeId(null);
+            if ($trick->getType() === $this) {
+                $trick->setType(null);
             }
         }
 

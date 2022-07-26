@@ -28,19 +28,20 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $userId = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Type $typeId = null;
-
-    #[ORM\OneToMany(mappedBy: 'trickId', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class)]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'trickId', targetEntity: Video::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
     private Collection $videos;
+
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Type $type = null;
 
     public function __construct()
     {
@@ -101,29 +102,6 @@ class Trick
         return $this;
     }
 
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): self
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getTypeId(): ?Type
-    {
-        return $this->typeId;
-    }
-
-    public function setTypeId(?Type $typeId): self
-    {
-        $this->typeId = $typeId;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Image>
@@ -137,7 +115,7 @@ class Trick
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
-            $image->setTrickId($this);
+            $image->setTrick($this);
         }
 
         return $this;
@@ -147,8 +125,8 @@ class Trick
     {
         if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
-            if ($image->getTrickId() === $this) {
-                $image->setTrickId(null);
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
             }
         }
 
@@ -167,7 +145,7 @@ class Trick
     {
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
-            $video->setTrickId($this);
+            $video->setTrick($this);
         }
 
         return $this;
@@ -177,10 +155,34 @@ class Trick
     {
         if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($video->getTrickId() === $this) {
-                $video->setTrickId(null);
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
