@@ -4,9 +4,10 @@
 {% endblock %}
 
 {% block body %}
+	<h1>Tricks Page</h1>
 	{% if tricks %}
 		{% for trick in tricks %}
-			<h1>{{trick.title}}</h1>
+
 			<p>{{trick.description}}</p>
 
 		{% endfor %}

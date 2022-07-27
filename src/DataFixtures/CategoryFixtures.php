@@ -2,18 +2,20 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Trick;
-use DateTime;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class TricksFixtures extends Fixture
+class CategoryFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
         // $product = new Product();
         // $manager->persist($product);
 
+        $category= new Category();
+        $category->setName('snow');
+        $manager->persist($category);
         $manager->flush();
     }
 }

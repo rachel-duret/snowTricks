@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Tricks
+{% endblock %}
+
+{% block body %}
+	<div class="container text-center">
+		<div class="row row-cols">
+			<div class="col">
+				<h1>Create Page</h1>
+				{{form_start(form)}}
+				{{form_widget(form)}}
+				<button type="submit" class="btn btn-primary">Create One Trick</button>
+				{{ form_end(form) }}
+			</div>
+
+		</div>
+	</div>
+
+
+{% endblock %}

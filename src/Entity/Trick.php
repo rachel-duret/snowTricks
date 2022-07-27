@@ -39,9 +39,11 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Type $type = null;
+    private ?Category $category = null;
+
+   
 
     public function __construct()
     {
@@ -175,15 +177,20 @@ class Trick
         return $this;
     }
 
-    public function getType(): ?Type
+    public function getCategory(): ?Category
     {
-        return $this->type;
+        return $this->category;
     }
 
-    public function setType(?Type $type): self
+    public function setCategory(?Category $category): self
     {
-        $this->type = $type;
+        $this->category = $category;
 
         return $this;
     }
+
+   
+ 
+
+   
 }
