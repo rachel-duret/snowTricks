@@ -42,11 +42,11 @@ class TricksController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             //set Category
             $name=$form->get('name')->getData();
-            $category->setName($name);
-            $this->em->persist($category);
+            $category->setName($name);  
+        
+         
 
-           /*  $trick->setCategory($category);
-            $trick = $form->getData(); */
+        
             $imagePath = $form->get('image')->getData();
   
             if($imagePath){
@@ -62,7 +62,6 @@ class TricksController extends AbstractController
                 }
                 $image->setImagePath('/uploads/'.$newFileName);
                 
-            $this->em->persist($image);
 
             
             }
@@ -70,21 +69,27 @@ class TricksController extends AbstractController
 
             //set Video
             $video->setVideoPath('https://www.youtube.com/watch?v=BwVDEsLx_Ig');    
-            $this->em->persist($video);
+          
 
             //set Trick
-            $userid=2;
+        
             $title=$form->get('title')->getData();
             $date = new DateTimeImmutable();
             $description=$form->get('description')->getData();
             $trick->setTitle($title);
             $trick->setDescription($description);
             $trick->setCreatAt($date);
-            $trick->setUser($this->getUser($userid));
+            $trick->setUser($this->getUser());
+
+            //relate trick to the category
+            $trick->setCategory($category);
            
+            $image->setTrick($trick);
+            $video->setTrick($trick);
         
-           
-    
+            $this->em->persist($category);   
+            $this->em->persist($image);
+            $this->em->persist($video);
             $this->em->persist($trick);
             $this->em->flush();
             
