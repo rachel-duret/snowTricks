@@ -37,7 +37,6 @@ class TricksController extends AbstractController
         $category = new Category();
         $image = new Image();
         $video = new Video();
-        $user = new User();
         $form = $this->createForm(TrickFormType::class, [$trick, $category]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
