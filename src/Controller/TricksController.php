@@ -8,7 +8,10 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
 use App\Form\TrickFormType;
+use App\Repository\CategoryRepository;
+use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
 use DateTime;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,20 +26,26 @@ class TricksController extends AbstractController
 {
     private $em;
     private $trickRepository;
+    private $imageRepository;
+    private $categoryRepository;
+    private $videoRepository;
+    
 
-    public function __construct(TrickRepository $trickRepository, EntityManagerInterface $em)
+    public function __construct(TrickRepository $trickRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository, VideoRepository $videoRepository, EntityManagerInterface $em)
     {
         $this->trickRepository =$trickRepository;
+        $this->imageRepository =$imageRepository;
+        $this->categoryRepository =$categoryRepository;
+        $this->videoRepository =$videoRepository;
+
         $this->em = $em;
     }
 
-    #[Route('/create', name:'create')]
+    #[Route('/create', name:'app_create')]
     public function create(Request $request): Response
     {
         $trick = new Trick();
         $category = new Category();
-        $image = new Image();
-        $video = new Video();
         $form = $this->createForm(TrickFormType::class, [$trick, $category]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
@@ -44,9 +53,7 @@ class TricksController extends AbstractController
             $name=$form->get('name')->getData();
             $category->setName($name);  
         
-         
-
-        
+            //upload image
             $imagePath = $form->get('image')->getData();
   
             if($imagePath){
@@ -60,38 +67,25 @@ class TricksController extends AbstractController
                 }catch (FileException $e){
                     return new Response($e->getMessage());
                 }
-                $image->setImagePath('/uploads/'.$newFileName);
-                
-
+                $trick->setImage('/uploads/'.$newFileName);
             
             }
-            // set User
-
-            //set Video
-            $video->setVideoPath('https://www.youtube.com/watch?v=BwVDEsLx_Ig');    
-          
-
             //set Trick
-        
             $title=$form->get('title')->getData();
-            $date = new DateTimeImmutable();
             $description=$form->get('description')->getData();
             $trick->setTitle($title);
             $trick->setDescription($description);
-            $trick->setCreatAt($date);
+            $trick->setCreatAt(new DateTimeImmutable());
             $trick->setUser($this->getUser());
-
+    
             //relate trick to the category
             $trick->setCategory($category);
            
-            $image->setTrick($trick);
-            $video->setTrick($trick);
-        
-            $this->em->persist($category);   
-            $this->em->persist($image);
-            $this->em->persist($video);
+            $this->em->persist($category);    
             $this->em->persist($trick);
             $this->em->flush();
+
+            return $this->redirectToRoute('app_tricks');
             
         }
         return $this->render('tricks/create.html.twig',[
@@ -100,13 +94,46 @@ class TricksController extends AbstractController
     }
 
     
-    #[Route('/tricks', name: 'app_tricks')]
-    public function index(TrickRepository $trickRepository): Response
+    #[Route('/tricks', methods: ['GET'], name: 'app_tricks')]
+    public function index(): Response
     {
-        $tricks = $trickRepository->findAll();
-       
+        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
         return $this->render('tricks/index.html.twig', [
             'tricks' => $tricks,
+    
         ]);
     }
+
+    #[Route('/tricks/{id}', methods: ['GET'], name: 'app_trick')]
+    public function trick($id):Response
+    {
+      $trick =$this->trickRepository->find($id);
+      $category = $trick->getCategory();
+      $user= $trick->getUser();
+    
+      return $this->render('tricks/trick.html.twig', [
+        'trick'=>$trick,
+        'category'=>$category,
+        'user'=>$user
+      
+      ]);
+     
+    }
+
+    #[Route('/tricks/update/{id}', name: 'app_update')]
+    public function update($id):Response
+    {
+      $trick =$this->trickRepository->find($id);
+      $category = $trick->getCategory();
+      $user= $trick->getUser();
+    
+      return $this->render('tricks/update.html.twig', [
+        'trick'=>$trick,
+        'category'=>$category,
+        'user'=>$user
+      
+      ]);
+     
+    }
+
 }

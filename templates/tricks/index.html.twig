@@ -5,13 +5,28 @@
 
 {% block body %}
 	<h1>Tricks Page</h1>
-	{% if tricks %}
-		{% for trick in tricks %}
+	<div class="container p-5">
+		<div class="row">
+			{% if tricks %}
+				{% for trick in tricks %}
 
-			<p>{{trick.description}}</p>
 
-		{% endfor %}
-	{% endif %}
+					<div class="col-lg-4 mb-4">
+						<div class="card mt-4 text-center">
 
+							<class="cardcard-tricks-sizemt-4mb-4">
+								<a href="/tricks/{{trick.id}}" class="text-decoration-none arrow-color">
+									<img class="card-img-top" src="{{trick.image}}" alt="{{trick.title}}">
+									<h2>{{trick.title}}</h2>
+								</a>
+							</div>
+
+						</div>
+					</div>
+
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
 
 {% endblock %}
