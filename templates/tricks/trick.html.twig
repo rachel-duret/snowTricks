@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Trick!
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-sm-6">
+				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
+
+					<div class="card card-tricks-size mt-4 mb-4">
+						<img class="card-img-top" src="{{trick.image}}" alt="{{ trick.title }}">
+
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-sm-6">
+				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
+					<h2>{{trick.title}}</h2>
+					<p>Category:
+						{{category.name}}
+					</p>
+					<p>{{trick.description}}</p>
+					<p>Created by:{{user.username}}</p>
+					<p>Created at:{{trick.creatAt|date("D-M-Y H:i:s ")}}</p>
+				</div>
+				<a class="btn btn-primary" href="tricks/update/{{trick.id}}" role="button" ">Update</a>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<h2>Comments</h2>
+		</div>
+	</div>
+
+
+{% endblock %}

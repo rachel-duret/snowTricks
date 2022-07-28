@@ -41,11 +41,10 @@ class TrickFormType extends AbstractType
         ->add('image', FileType::class, [
             'attr'=> array(
                 'class'=>'form-control',
-                'placeholder'=>'Trick title..'
+                
             ),
             'label'=>false
         ])
-      
         ;
     }
 
