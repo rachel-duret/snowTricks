@@ -25,7 +25,8 @@
 					<p>Created by:{{user.username}}</p>
 					<p>Created at:{{trick.creatAt|date("D-M-Y H:i:s ")}}</p>
 				</div>
-				<a class="btn btn-primary" href="tricks/update/{{trick.id}}" role="button" ">Update</a>
+				<a class="btn btn-primary" href="/tricks/update/{{trick.id}}" role="button" ">Update</a>
+				<a class="btn btn-danger" href="/tricks/update/{{trick.id}}" role="button" ">Delete</a>
 			</div>
 		</div>
 		<hr>

@@ -8,6 +8,8 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
 use App\Form\TrickFormType;
+use App\Form\TrickUpdateFormType;
+use App\Form\TrickUpdateType;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
@@ -110,7 +112,7 @@ class TricksController extends AbstractController
       $trick =$this->trickRepository->find($id);
       $category = $trick->getCategory();
       $user= $trick->getUser();
-    
+   
       return $this->render('tricks/trick.html.twig', [
         'trick'=>$trick,
         'category'=>$category,
@@ -121,16 +123,51 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/update/{id}', name: 'app_update')]
-    public function update($id):Response
+    public function update($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
-      $category = $trick->getCategory();
-      $user= $trick->getUser();
-    
+      $category = $this->categoryRepository->find($trick->getId());
+      $form = $this->createForm(TrickUpdateFormType::class, [$trick,$category]);
+      $form->handleRequest($request);
+      $imagePath = $form->get('image')->getData();
+      
+
+      if($form->isSubmitted() && $form->isValid()){
+        if($imagePath) {
+            if($trick->getImage() !==null){
+
+                $newFileName = uniqid().'.'.$imagePath->guessExtension();
+                try{
+                    $imagePath->move(
+                        $this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName
+                    );
+                    
+                }catch (FileException $e){
+                    return new Response($e->getMessage());
+                }
+                $trick->setImage('/uploads/'.$newFileName);
+                $this->em->flush();
+
+                return $this->redirectToRoute('app_tricks');
+                
+            }
+
+        } else{
+            $trick->setTitle($form->get('title')->getData());
+            $trick->setDescription($form->get('description')->getData());
+            $trick->setUpdateAt(new DateTimeImmutable());
+            $category->setName($form->get('name')->getData());
+            $trick->setCategory($category);
+
+            $this->em->flush();
+            return $this->redirectToRoute('app_tricks');
+
+        }
+      }
+     
       return $this->render('tricks/update.html.twig', [
         'trick'=>$trick,
-        'category'=>$category,
-        'user'=>$user
+        'form'=>$form->createView()
       
       ]);
      
