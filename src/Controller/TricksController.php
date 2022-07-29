@@ -43,7 +43,7 @@ class TricksController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/create', name:'app_create')]
+    #[Route('/create', methods:['POST'], name:'app_create')]
     public function create(Request $request): Response
     {
         $trick = new Trick();
@@ -121,8 +121,8 @@ class TricksController extends AbstractController
       ]);
      
     }
-
-    #[Route('/tricks/update/{id}', name: 'app_update')]
+    // Update
+    #[Route('/tricks/update/{id}',methods:['GET', 'POST'], name: 'app_update')]
     public function update($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
@@ -171,6 +171,17 @@ class TricksController extends AbstractController
       
       ]);
      
+    }
+
+    // Delete 
+    #[Route('/tricks/delete/{id}',methods:['GET', 'DELETE'], name: 'app_delete')]
+    public function delete($id): Response
+    {
+        $trick= $this->trickRepository->find($id);
+        $this->em->remove($trick);
+        $this->em->flush();
+        return $this->redirectToRoute('app_tricks');
+                
     }
 
 }
