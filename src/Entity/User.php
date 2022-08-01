@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(length:255)]
-    private ?string $resetPassword;
+    private ?string $token;
 
     public function getId(): ?int
     {
@@ -132,14 +132,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getResetPassword(): ?string
+    public function getToken(): ?string
     {
-        return $this->resetPassword;
+        return $this->token;
     }
 
-    public function setResetPassword(string $resetPassword): self
+    public function setToken(string $token): self
     {
-        $this->resetPassword = $resetPassword;
+        $this->token = $token;
 
         return $this;
     }

@@ -12,6 +12,7 @@
 					<div class="card card-tricks-size mt-4 mb-4">
 						<img class="card-img-top" src="{{trick.image}}" alt="{{ trick.title }}">
 
+
 					</div>
 				</div>
 			</div>
@@ -25,7 +26,7 @@
 					<p>Created by:{{user.username}}</p>
 					<p>Created at:{{trick.creatAt|date("D-M-Y H:i:s ")}}</p>
 				</div>
-				<a class="btn btn-primary" href="/tricks/update/{{trick.id}}" role="button">Update</a>
+				<a class="btn btn-primary" href="={{path('app_update', {id: trick.id})}}" role="button">Update</a>
 				<a class="btn btn-danger " href="/tricks/delete/{{trick.id}}" role="button">Delete</a>
 			</div>
 		</div>

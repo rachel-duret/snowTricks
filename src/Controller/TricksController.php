@@ -152,7 +152,7 @@ class TricksController extends AbstractController
                 
             }
 
-        } else{
+        }
             $trick->setTitle($form->get('title')->getData());
             $trick->setDescription($form->get('description')->getData());
             $trick->setUpdateAt(new DateTimeImmutable());
@@ -162,7 +162,7 @@ class TricksController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('app_tricks');
 
-        }
+        
       }
      
       return $this->render('tricks/update.html.twig', [
