@@ -2,17 +2,24 @@
 
 namespace App\Controller;
 
+use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
+
+    #[Route('/', methods:['GET'] ,name: 'app_home')]
+    public function index(TrickRepository $trickRepository): Response
     {
+        $tricks = $trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
+        return $this->render('tricks/index.html.twig', [
+            'tricks' => $tricks,
+    
+        ]);
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'tricks' => $tricks,
         ]);
     }
 }
