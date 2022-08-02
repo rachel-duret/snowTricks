@@ -28,9 +28,8 @@ class TricksController extends AbstractController
 {
     private $em;
     private $trickRepository;
-    private $imageRepository;
     private $categoryRepository;
-    private $videoRepository;
+   
     
 
     public function __construct(TrickRepository $trickRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository, VideoRepository $videoRepository, EntityManagerInterface $em)
@@ -43,7 +42,7 @@ class TricksController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/create', methods:['POST'], name:'app_create')]
+    #[Route('/create', methods:['GET','POST'], name:'app_create')]
     public function create(Request $request): Response
     {
         $trick = new Trick();

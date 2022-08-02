@@ -33,6 +33,7 @@ security:
   access_control:
     - { path: ^/create, roles: ROLE_USER }
     - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/tricks/update, roles: ROLE_USER }
 
 when@test:
   security:

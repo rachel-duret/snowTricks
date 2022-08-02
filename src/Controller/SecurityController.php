@@ -121,7 +121,7 @@ class SecurityController extends AbstractController
             $this->em->flush($user);
             
             $this->addFlash('success', 'You password reset successful !');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_home');
         }
         
 
