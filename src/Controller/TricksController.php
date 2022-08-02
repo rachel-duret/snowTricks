@@ -95,7 +95,7 @@ class TricksController extends AbstractController
     }
 
     
-    #[Route('/tricks', methods: ['GET'], name: 'app_tricks')]
+  /*   #[Route('/tricks', methods: ['GET'], name: 'app_tricks')]
     public function index(): Response
     {
         $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
@@ -103,7 +103,7 @@ class TricksController extends AbstractController
             'tricks' => $tricks,
     
         ]);
-    }
+    } */
 
     #[Route('/tricks/{id}', methods: ['GET'], name: 'app_trick')]
     public function trick($id):Response

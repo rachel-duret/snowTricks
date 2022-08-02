@@ -1,10 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	Homepage!
+{% block title %}Hello Tricks!
 {% endblock %}
 
 {% block body %}
-	<h1>This is Home page</h1>
+
+	<div class="container p-5">
+		<div class="row">
+			{% if tricks %}
+				{% for trick in tricks %}
+					<div class="col-lg-4 mb-4">
+						<div class="card mt-4 text-center">
+							<a href="{{path('app_trick',{id:trick.id}) }}" class="text-decoration-none arrow-color">
+								<img class="card-img-top" src="{{trick.image}}" alt="{{trick.title}}">
+								<h2>{{trick.title}}</h2>
+							</a>
+							<i class="fa-solid fa-pen-to-square"></i>
+							<i class="fa-solid fa-trash-can"></i>
+
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
 
 {% endblock %}
