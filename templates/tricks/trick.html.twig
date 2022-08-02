@@ -33,6 +33,17 @@
 		<hr>
 		<div class="row">
 			<h2>Comments</h2>
+			<div>
+				{% for comment in comments %}
+					<p>{{comment.comment}}</p>
+				{% endfor %}
+			</div>
+			<div>
+				{{ form_start(commentForm) }}
+				{{form_row(commentForm.comment)}}
+				<button type="submit" class="btn btn-primary">Comment</button>
+				{{ form_end(commentForm) }}
+			</div>
 		</div>
 	</div>
 

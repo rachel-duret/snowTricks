@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
+use App\Form\CommentFromType;
 use App\Form\TrickFormType;
 use App\Form\TrickUpdateFormType;
 use App\Form\TrickUpdateType;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentRepository;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
@@ -26,20 +29,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TricksController extends AbstractController
 {
-    private $em;
-    private $trickRepository;
-    private $categoryRepository;
    
-    
-
-    public function __construct(TrickRepository $trickRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository, VideoRepository $videoRepository, EntityManagerInterface $em)
+    public function __construct(private TrickRepository $trickRepository, private ImageRepository $imageRepository, private CategoryRepository $categoryRepository, private VideoRepository $videoRepository, private CommentRepository $commentRepository, private EntityManagerInterface $em)
     {
-        $this->trickRepository =$trickRepository;
-        $this->imageRepository =$imageRepository;
-        $this->categoryRepository =$categoryRepository;
-        $this->videoRepository =$videoRepository;
-
-        $this->em = $em;
+       
     }
 
     #[Route('/create', methods:['GET','POST'], name:'app_create')]
@@ -95,31 +88,50 @@ class TricksController extends AbstractController
     }
 
     
-  /*   #[Route('/tricks', methods: ['GET'], name: 'app_tricks')]
-    public function index(): Response
-    {
-        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
-        return $this->render('tricks/index.html.twig', [
-            'tricks' => $tricks,
-    
-        ]);
-    } */
-
-    #[Route('/tricks/{id}', methods: ['GET'], name: 'app_trick')]
-    public function trick($id):Response
+    // Single Trick 
+    #[Route('/tricks/{id}', methods: ['GET', 'POST'], name: 'app_trick')]
+    public function trick($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
       $category = $trick->getCategory();
       $user= $trick->getUser();
-   
+
+      // show comments,
+         $comments = $this->commentRepository->findBy(['trick'=>$trick],['createAt'=>'DESC'],10,0); 
+      // Create comment
+        $user = $this->getUser();
+        $comment= new Comment();
+        $form = $this->createForm(CommentFromType::class,$comment);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $comment->setComment($form->get('comment')->getData());
+            $comment->setCreateAt(new DateTimeImmutable());
+            $comment->setTrick($trick);
+            $comment->setUser($user);
+
+           $this->em->persist($comment);
+           $this->em->flush($comment);
+           
+           return $this->redirectToRoute('app_trick', array('id'=>$trick->getId()));
+           
+        }
+
+
+    
       return $this->render('tricks/trick.html.twig', [
         'trick'=>$trick,
         'category'=>$category,
-        'user'=>$user
+        'user'=>$user,
+        'commentForm'=>$form->createView(),
+        'comments'=>$comments
       
       ]);
      
     }
+
+
+
     // Update
     #[Route('/tricks/update/{id}',methods:['GET', 'POST'], name: 'app_update')]
     public function update($id, Request $request):Response
