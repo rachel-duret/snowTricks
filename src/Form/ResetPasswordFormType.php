@@ -15,7 +15,7 @@ class ResetPasswordFormType extends AbstractType
             ->add('password', PasswordType::class,[
                 'label'=>'Enter your new password',
                 'attr'=>[
-                    'class'=>'form-control'
+                    'class'=>'form-control mb-2'
                 ]
             ])
         ;

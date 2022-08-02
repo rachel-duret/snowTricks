@@ -45,6 +45,7 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+    /* ***********************Forgotten Password*************************** */
     #[Route('/forgotten_password', name: 'app_forgotten_password')]
     public function token(Request $request, 
      TokenGeneratorInterface $tokenGeneratorInterface,
@@ -101,24 +102,36 @@ class SecurityController extends AbstractController
         ): Response
     {
         // check we have this token in the database
-        $user=$this->userRepository->findBy(['token'=>$token]);
-       if($user){
+        $user=$this->userRepository->findOneBy(['token'=>$token]);
+       if($user) {
         $form = $this->createForm(ResetPasswordFormType::class);
-        $form->handleRequest();
+        $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             //delete token in database
-            
-            
-
-            
           
+            $user->setToken('');
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+                ); 
+                
+            $this->em->persist($user);
+            $this->em->flush($user);
+            
+            $this->addFlash('success', 'You password reset successful !');
+            return $this->redirectToRoute('app_login');
         }
+        
 
         return $this->render('security/reset_password.html.twig',[
-            'resetPasswordForm'=>$form
+            'resetPasswordForm'=>$form->createView()
         ]);
        
        }
+
+       
        $this->addFlash('danger','Token Invalide');
        return $this->redirectToRoute('app_login');
        
