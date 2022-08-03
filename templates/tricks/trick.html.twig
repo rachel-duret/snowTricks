@@ -18,7 +18,10 @@
 							</div>
 							<div class="carousel-inner">
 								<div class="carousel-item active" data-bs-interval="10000">
-									<img src="{{trick.image}}" class="d-block w-100" alt="{{ trick.title }}">
+									{% for image in trick.images %}
+										<img src="{{image.imagePath}}" class="d-block w-100" alt="{{ trick.title }}">
+									{% endfor %}
+
 									<div class="carousel-caption d-none d-md-block"></div>
 								</div>
 

@@ -49,10 +49,9 @@ class TricksController extends AbstractController
         
             //upload image
             $imagePath = $form->get('image')->getData();
-  
+            
             if($imagePath){
                 $newFileName = uniqid().'.'.$imagePath->guessExtension();
-
                 try{
                     $imagePath->move(
                         $this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName
@@ -61,7 +60,9 @@ class TricksController extends AbstractController
                 }catch (FileException $e){
                     return new Response($e->getMessage());
                 }
-                $trick->setImage('/uploads/'.$newFileName);
+                $image = new Image();
+                $image->setImagePath('/uploads/'.$newFileName);
+               
             
             }
             //set Trick
@@ -71,12 +72,14 @@ class TricksController extends AbstractController
             $trick->setDescription($description);
             $trick->setCreatAt(new DateTimeImmutable());
             $trick->setUser($this->getUser());
+          
     
             //relate trick to the category
             $trick->setCategory($category);
-           
-            $this->em->persist($category);    
+            $trick->addImage($image);
             $this->em->persist($trick);
+            $this->em->persist($image);
+            $this->em->persist($category);
             $this->em->flush();
 
             return $this->redirectToRoute('app_home');
@@ -93,7 +96,6 @@ class TricksController extends AbstractController
     public function trick($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
-      $category = $trick->getCategory();
       $user= $trick->getUser();
 
       // show comments,
@@ -123,8 +125,6 @@ class TricksController extends AbstractController
     
       return $this->render('tricks/trick.html.twig', [
         'trick'=>$trick,
-        'category'=>$category,
-        'user'=>$user,
         'commentForm'=>$form->createView(),
         'comments'=>$comments
       
@@ -147,7 +147,7 @@ class TricksController extends AbstractController
 
       if($form->isSubmitted() && $form->isValid()){
         if($imagePath) {
-            if($trick->getImage() !==null){
+            if($trick->getImages() !==null){
 
                 $newFileName = uniqid().'.'.$imagePath->guessExtension();
                 try{
@@ -158,7 +158,7 @@ class TricksController extends AbstractController
                 }catch (FileException $e){
                     return new Response($e->getMessage());
                 }
-                $trick->setImage('/uploads/'.$newFileName);
+               // $trick->addImage('/uploads/'.$newFileName);
                 $this->em->flush();
 
                 return $this->redirectToRoute('app_home');
