@@ -98,8 +98,10 @@ class TricksController extends AbstractController
 
       // show comments,
          $comments = $this->commentRepository->findBy(['trick'=>$trick],['createAt'=>'DESC'],10,0); 
+       
       // Create comment
         $user = $this->getUser();
+        
         $comment= new Comment();
         $form = $this->createForm(CommentFromType::class,$comment);
         $form->handleRequest($request);
