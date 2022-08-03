@@ -9,8 +9,33 @@
 			<div class="col-12 col-sm-6">
 				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
 
-					<div class="card card-tricks-size mt-4 mb-4">
-						<img class="card-img-top" src="{{trick.image}}" alt="{{ trick.title }}">
+					<div class="card  mt-4 mb-4">
+						<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+							<div class="carousel-indicators">
+								<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+								<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+								<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+							</div>
+							<div class="carousel-inner">
+								<div class="carousel-item active" data-bs-interval="10000">
+									<img src="{{trick.image}}" class="d-block w-100" alt="{{ trick.title }}">
+									<div class="carousel-caption d-none d-md-block"></div>
+								</div>
+
+								<div class="carousel-item">
+									<iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="d-block w-100"></iframe>
+									<div class="carousel-caption d-none d-md-block"></div>
+								</div>
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
 
 
 					</div>
@@ -19,12 +44,17 @@
 			<div class="col-12 col-sm-6">
 				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
 					<h2>{{trick.title}}</h2>
-					<p>Category:
-						{{category.name}}
+					<p>
+						Category:<strong class="text-capitalize">{{trick.category.name}}</strong>
+
 					</p>
-					<p>{{trick.description}}</p>
-					<p>Created by:{{user.username}}</p>
-					<p>Created at:{{trick.creatAt|date("D-M-Y H:i:s ")}}</p>
+					<p class="text-capitalize">{{trick.description}}</p>
+					<p>
+						Created by:<strong class="text-capitalize">{{trick.user.username}}</strong>
+					</p>
+					<p>
+						Created at:<strong>{{trick.creatAt|date("D-M-Y H:i:s ")}}</strong>
+					</p>
 				</div>
 				<a class="btn btn-primary" href="{{ path('app_update', {id: trick.id}) }}" role="button">Update</a>
 				<a class="btn btn-danger " href="{{ path('app_delete', {id: trick.id}) }}" role="button">Delete</a>
@@ -33,8 +63,39 @@
 		<hr>
 		<div class="row">
 			<h2>Comments</h2>
+			<div class="col text-center">
+				{% for comment in comments %}
+					<p class="text-capitalize">{{comment.comment}}</p>
+					<div class="d-flex px-5  ">
+						<p>
+							Commented at:<strong class="text-capitalize">{{comment.createAt|date("D-M-Y H:i:s ")}}
+							</strong>
+							-By:<strong class="text-capitalize">{{comment.user.username}}</strong>
+						</p>
+						{% if comment.user.image %}
+							<img src="{{comment.user.image}}" alt="">
+						{% else %}
+							<a href="#" class="link link-secondry ml-5">
+								<i class="bi bi-person-circle"></i>
+							</a>
+
+						{% endif %}
+					</p>
+
+
+				</div>
+				<hr>
+
+			{% endfor %}
+		</div>
+		<div>
+			{% if app.user %}
+				{{ form_start(commentForm) }}
+				{{form_row(commentForm.comment)}}
+				<button type="submit" class="btn btn-primary">Comment</button>
+				{{ form_end(commentForm) }}
+			{% endif %}
+
 		</div>
 	</div>
-
-
-{% endblock %}
+</div>{% endblock %}
