@@ -79,7 +79,7 @@ class TricksController extends AbstractController
             $this->em->persist($trick);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_tricks');
+            return $this->redirectToRoute('app_home');
             
         }
         return $this->render('tricks/create.html.twig',[
@@ -159,7 +159,7 @@ class TricksController extends AbstractController
                 $trick->setImage('/uploads/'.$newFileName);
                 $this->em->flush();
 
-                return $this->redirectToRoute('app_tricks');
+                return $this->redirectToRoute('app_home');
                 
             }
 
@@ -171,7 +171,7 @@ class TricksController extends AbstractController
             $trick->setCategory($category);
 
             $this->em->flush();
-            return $this->redirectToRoute('app_tricks');
+            return $this->redirectToRoute('app_home');
 
         
       }
@@ -191,7 +191,7 @@ class TricksController extends AbstractController
         $trick= $this->trickRepository->find($id);
         $this->em->remove($trick);
         $this->em->flush();
-        return $this->redirectToRoute('app_tricks');
+        return $this->redirectToRoute('app_home');
                 
     }
 
