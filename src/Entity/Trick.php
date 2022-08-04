@@ -29,12 +29,12 @@ class Trick
     private ?\DateTimeImmutable $updateAt = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class,cascade:['remove'])]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade:['remove'])]
     private Collection $videos;
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade:['remove'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
@@ -187,7 +187,7 @@ class Trick
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->videos->removeElement($comment)) {
+        if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);

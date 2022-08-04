@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Trick;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,12 +24,13 @@ class TrickUpdateFormType extends AbstractType
             ),
             'label'=>false
         ])
-        ->add('name', TextType::class, [
-            'attr'=> array(
-                'class'=>'form-control',
-                
-            ),
-            'label'=>false
+        ->add('category', EntityType::class, [
+           'class'=>Category::class,
+           'choice_label'=>'name',
+           'attr'=>[
+            'class'=>'form-control'
+           ]
+           
         ])
 
        
@@ -54,7 +57,7 @@ class TrickUpdateFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-           
+           //'data_class' => Trick::class,
         ]);
     }
 }

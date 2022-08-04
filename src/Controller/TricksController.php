@@ -139,7 +139,7 @@ class TricksController extends AbstractController
     {
       $trick =$this->trickRepository->find($id);
       $category = $this->categoryRepository->find($trick->getId());
-      $form = $this->createForm(TrickUpdateFormType::class, [$trick,$category]);
+      $form = $this->createForm(TrickUpdateFormType::class, $trick);
       $form->handleRequest($request);
       $imagePath = $form->get('image')->getData();
       

@@ -109,7 +109,7 @@ class SecurityController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             //delete token in database
           
-            $user->setToken('');
+            $user->setToken(null);
             $user->setPassword(
                 $passwordHasher->hashPassword(
                     $user,
