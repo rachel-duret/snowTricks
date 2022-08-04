@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FileController!
+{% endblock %}
+
+{% block body %}
+	<div class="container d-flex justify-content-center">
+		<div class="col-6 col-sm-6 ">
+			<h1>Create An Account</h1>
+			{{form_start(fileForm)}}
+			{{form_row(fileForm.video)}}
+			{{form_row(fileForm.image)}}
+			<button type="submit" class="btn btn-primary">Submit</button>
+			{{form_end(fileForm)}}
+		</div>
+	</div>
+{% endblock %}

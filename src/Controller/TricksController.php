@@ -97,7 +97,6 @@ class TricksController extends AbstractController
     {
       $trick =$this->trickRepository->find($id);
       $user= $trick->getUser();
-
       // show comments,
          $comments = $this->commentRepository->findBy(['trick'=>$trick],['createAt'=>'DESC'],10,0); 
        
