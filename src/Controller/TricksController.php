@@ -192,6 +192,7 @@ class TricksController extends AbstractController
         $trick= $this->trickRepository->find($id);
         $user = $this->getUser();
         if($user == $trick->getUser()){
+           
             $this->em->remove($trick);
             $this->em->flush();
             return $this->redirectToRoute('app_home');
