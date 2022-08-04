@@ -10,15 +10,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
 
-    #[Route('/', methods:['GET'] ,name: 'app_home')]
-    public function index(TrickRepository $trickRepository): Response
+    public function __construct(private TrickRepository $trickRepository)
     {
-        $tricks = $trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
+        
+    }
+    
+    #[Route('/', methods:['GET'] ,name: 'app_home')]
+    public function index(): Response
+    {
+        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],1,0);
+      
         return $this->render('home/index.html.twig', [
             'tricks' => $tricks,
     
         ]);
-        return $this->render('home/index.html.twig', [
+       
+    }
+
+    #[Route("/tricks", methods:['GET'], name:"app_tricks")]
+    public function loadMore(){
+        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC']);
+      
+
+        return $this->render('home/tricks.html.twig', [
             'tricks' => $tricks,
         ]);
     }

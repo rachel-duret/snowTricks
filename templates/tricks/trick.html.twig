@@ -18,7 +18,10 @@
 							</div>
 							<div class="carousel-inner">
 								<div class="carousel-item active" data-bs-interval="10000">
-									<img src="{{trick.image}}" class="d-block w-100" alt="{{ trick.title }}">
+									{% for image in trick.images %}
+										<img src="{{image.imagePath}}" class="d-block w-100" alt="{{ trick.title }}">
+									{% endfor %}
+
 									<div class="carousel-caption d-none d-md-block"></div>
 								</div>
 
@@ -56,8 +59,12 @@
 						Created at:<strong>{{trick.creatAt|date("D-M-Y H:i:s ")}}</strong>
 					</p>
 				</div>
-				<a class="btn btn-primary" href="{{ path('app_update', {id: trick.id}) }}" role="button">Update</a>
-				<a class="btn btn-danger " href="{{ path('app_delete', {id: trick.id}) }}" role="button">Delete</a>
+				{% if app.user and app.user==trick.user  %}
+					<a class="btn btn-primary" href="{{ path('app_upload_file', {id: trick.id}) }}" role="button">Upload file</a>
+					<a class="btn btn-primary" href="{{ path('app_update', {id: trick.id}) }}" role="button">Update</a>
+					<a class="btn btn-danger " href="{{ path('app_delete', {id: trick.id}) }}" role="button">Delete</a>
+				{% endif %}
+
 			</div>
 		</div>
 		<hr>
