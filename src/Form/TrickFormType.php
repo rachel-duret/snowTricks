@@ -17,14 +17,14 @@ class TrickFormType extends AbstractType
         $builder
         ->add('title',TextType::class, [
             'attr'=> array(
-                'class'=>'form-control',
+                'class'=>'form-control mb-3',
                 'placeholder'=>'Trick title..'
             ),
             'label'=>false
         ])
         ->add('name', TextType::class, [
             'attr'=> array(
-                'class'=>'form-control',
+                'class'=>'form-control mb-3',
                 'placeholder'=>'Category'
             ),
             'label'=>false
@@ -33,14 +33,14 @@ class TrickFormType extends AbstractType
        
         ->add('description', TextareaType::class, [
             'attr'=> array(
-                'class'=>'form-control',
+                'class'=>'form-control mb-3',
                 'placeholder'=>'Trick title..'
             ),
             'label'=>false
         ])
         ->add('image', FileType::class, [
             'attr'=> array(
-                'class'=>'form-control',
+                'class'=>'form-control mb-3',
                 
             ),
             'label'=>false

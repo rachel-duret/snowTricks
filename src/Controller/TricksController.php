@@ -190,9 +190,13 @@ class TricksController extends AbstractController
     public function delete($id): Response
     {
         $trick= $this->trickRepository->find($id);
-        $this->em->remove($trick);
-        $this->em->flush();
-        return $this->redirectToRoute('app_home');
+        $user = $this->getUser();
+        if($user == $trick->getUser()){
+            $this->em->remove($trick);
+            $this->em->flush();
+            return $this->redirectToRoute('app_home');
+        }
+       
                 
     }
 
