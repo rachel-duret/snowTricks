@@ -43,7 +43,12 @@ class TricksController extends AbstractController
         $form = $this->createForm(TrickFormType::class, [$trick, $category]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
+            // To check trick already exist or not
+            $newTrick = $this->trickRepository->findBy(['title'=>$form->get('title')->getData()]);
+            if(!$newTrick){
+
             //set Category
+            
             $name=$form->get('name')->getData();
             $category->setName($name);  
         
@@ -84,6 +89,10 @@ class TricksController extends AbstractController
 
             return $this->redirectToRoute('app_home');
             
+            }
+
+            $this->addFlash('danger','Trick alredy exist.');
+
         }
         return $this->render('tricks/create.html.twig',[
             'form' => $form->createView(),
