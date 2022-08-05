@@ -18,7 +18,7 @@ class HomeController extends AbstractController
     #[Route('/', methods:['GET'] ,name: 'app_home')]
     public function index(): Response
     {
-        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],1,0);
+        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
       
         return $this->render('home/index.html.twig', [
             'tricks' => $tricks,
@@ -31,13 +31,6 @@ class HomeController extends AbstractController
     public function loadMore(){
         $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC']);
     
-        foreach($tricks as $trick){
-            $images = $trick->getImages(); 
-             
-
-        }
-       
-        
 
         return $this->render('home/tricks.html.twig', [
             'tricks' => $tricks,
