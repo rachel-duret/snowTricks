@@ -4,11 +4,17 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container text-center">
-		<div class="row row-cols">
-			<div class="col">
+	<div class="container d-flex flex-column  justify-content-evenly">
+		<div class="row ">
+			<div class="col-8 d-flex flex-column  justify-content-center ">
 				<h1>Update
 					{{trick.title}}</h1>
+				{% for image in trick.images %}
+					<div class="col-5 d-flex justify-content-md-between justify-content-center  mt-4 mb-4">
+						<img src="{{image.imagePath}}" class="img-fluid  w-100" alt="{{ trick.title }}">
+
+					</div>
+				{% endfor %}
 
 				{{form_start(form)}}
 				{{form_widget(form)}}
