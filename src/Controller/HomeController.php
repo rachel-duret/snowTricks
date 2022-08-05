@@ -30,10 +30,18 @@ class HomeController extends AbstractController
     #[Route("/tricks", methods:['GET'], name:"app_tricks")]
     public function loadMore(){
         $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC']);
-      
+    
+        foreach($tricks as $trick){
+            $images = $trick->getImages(); 
+             
+
+        }
+       
+        
 
         return $this->render('home/tricks.html.twig', [
             'tricks' => $tricks,
+           
         ]);
     }
 }
