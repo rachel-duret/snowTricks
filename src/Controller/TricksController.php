@@ -141,40 +141,18 @@ class TricksController extends AbstractController
       $category = $this->categoryRepository->find($trick->getId());
       $form = $this->createForm(TrickUpdateFormType::class, $trick);
       $form->handleRequest($request);
-      $imagePath = $form->get('image')->getData();
-      
+   
 
       if($form->isSubmitted() && $form->isValid()){
-        if($imagePath) {
-            if($trick->getImages() !==null){
-
-                $newFileName = uniqid().'.'.$imagePath->guessExtension();
-                try{
-                    $imagePath->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName
-                    );
-                    
-                }catch (FileException $e){
-                    return new Response($e->getMessage());
-                }
-               // $trick->addImage('/uploads/'.$newFileName);
-                $this->em->flush();
-
-                return $this->redirectToRoute('app_home');
-                
-            }
-
-        }
+        
+        
             $trick->setTitle($form->get('title')->getData());
             $trick->setDescription($form->get('description')->getData());
             $trick->setUpdateAt(new DateTimeImmutable());
-            $category->setName($form->get('name')->getData());
-            $trick->setCategory($category);
+            $trick->setCategory($form->get('category')->getData());
 
             $this->em->flush();
-            return $this->redirectToRoute('app_home');
-
-        
+            return $this->redirectToRoute('app_trick', array('id'=>$trick->getId()));    
       }
      
       return $this->render('tricks/update.html.twig', [

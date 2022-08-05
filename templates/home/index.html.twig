@@ -54,8 +54,9 @@
 					<div class="col m-auto ">
 						<div class="card mt-5" style="width: 14rem;">
 							<a href="{{path('app_trick',{id:trick.id}) }}" class="text-decoration-none arrow-color">
-								{% set image = trick.images | first%}
-								<img class="card-img-top" src="{{image.imagePath}}" alt="{{trick.title}}">
+								{% for image in trick.images[:1] %}
+									<img class="card-img-top" src="{{image.imagePath}}" alt="{{trick.title}}">
+								{% endfor %}
 
 
 							</a>
