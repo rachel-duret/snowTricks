@@ -41,16 +41,6 @@ class TrickUpdateFormType extends AbstractType
             ),
             'label'=>false
         ])
-        ->add('image', FileType::class, [
-            'required'=>false,
-            'mapped'=>false,
-            'attr'=> array(
-                'class'=>'form-control',
-               
-                
-            ),
-            'label'=>false
-        ])
         ;
     }
 
