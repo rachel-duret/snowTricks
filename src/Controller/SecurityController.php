@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Form\ActivateAccountFormType;
 use App\Form\ForgottenPasswordFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,14 +27,19 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+      
+        /* if($user->getToken() ==null){
+            $this->addFlash('danger', 'Activate your account first !');
+            $url = $this->generateUrl('app_activate_account', ['username'=>$user->getUsername()], UrlGeneratorInterface::ABSOLUTE_URL);
+            return  $this->redirectToRoute($url);
+        } */
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+       
+       
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
@@ -43,6 +48,34 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    // Activate account
+    
+    #[Route('/activate_account/{username}',  name:'app_activate_account')]
+    public function activateAccount($username, Request $request, TokenGeneratorInterface $tokenGeneratorInterface, UserRepository $userRepository ):Response
+    {
+        $user = $userRepository->findOneBy(['username'=>$username]);
+    
+        if($user && $user->getToken()==null){
+            $form = $this->createForm(ActivateAccountFormType::class);
+            $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()) {
+                $token = $tokenGeneratorInterface->generateToken();
+                $user->setToken($token);
+
+                $this->em->persist($user);
+                $this->em->flush($user);
+                $this->addFlash('success', 'Your account already activated .');
+                
+                return $this->redirectToRoute('app_login');
+            }
+
+        }
+
+        return $this->render('security/activate_account.html.twig',[
+            'activateForm'=>$form->createView()
+        ]);
     }
 
     /* ***********************Forgotten Password*************************** */

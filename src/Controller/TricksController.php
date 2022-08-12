@@ -91,7 +91,7 @@ class TricksController extends AbstractController
             
             }
 
-            $this->addFlash('danger','Trick alredy exist.');
+            $this->addFlash('danger','Trick alredy exist. Please create another trick !');
 
         }
         return $this->render('tricks/create.html.twig',[
