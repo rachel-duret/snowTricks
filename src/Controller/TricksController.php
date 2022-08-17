@@ -143,7 +143,7 @@ class TricksController extends AbstractController
 
 
     // Update
-    #[Route('/tricks/update/{id}',methods:['GET', 'POST'], name: 'app_update')]
+    #[Route('/tricks/update/{id}/{title}',methods:['GET', 'POST'], name: 'app_update')]
     public function update($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
