@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ActivateAccountFormType;
 use App\Form\ForgottenPasswordFormType;
 use App\Form\ResetPasswordFormType;
@@ -25,7 +26,7 @@ class SecurityController extends AbstractController
        
     }
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
       
         /* if($user->getToken() ==null){
@@ -52,17 +53,17 @@ class SecurityController extends AbstractController
 
     // Activate account
     
-    #[Route('/activate_account/{username}',  name:'app_activate_account')]
-    public function activateAccount($username, Request $request, TokenGeneratorInterface $tokenGeneratorInterface, UserRepository $userRepository ):Response
+    #[Route('/activate_account/{token}',  name:'app_activate_account')]
+    public function activateAccount($token, Request $request ):Response
     {
-        $user = $userRepository->findOneBy(['username'=>$username]);
+        $user = $this->userRepository->findOneBy(['token'=>$token]);
     
-        if($user && $user->getToken()==null){
+        if($user){
             $form = $this->createForm(ActivateAccountFormType::class);
             $form->handleRequest($request);
             if($form->isSubmitted() && $form->isValid()) {
-                $token = $tokenGeneratorInterface->generateToken();
-                $user->setToken($token);
+                $user->setToken(null);
+                $user->setIsVerified(true);
 
                 $this->em->persist($user);
                 $this->em->flush($user);
@@ -70,13 +71,17 @@ class SecurityController extends AbstractController
                 
                 return $this->redirectToRoute('app_login');
             }
+            return $this->render('security/activate_account.html.twig',[
+                'activateForm'=>$form->createView()
+            ]);
 
         }
+        $this->addFlash('danger', 'Page do not exist .');
+        return $this->redirectToRoute('app_home');
 
-        return $this->render('security/activate_account.html.twig',[
-            'activateForm'=>$form->createView()
-        ]);
+       
     }
+   
 
     /* ***********************Forgotten Password*************************** */
     #[Route('/forgotten_password', name: 'app_forgotten_password')]

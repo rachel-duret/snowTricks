@@ -26,6 +26,16 @@
 		<div class="container">
 			{% include "_partials/_header.html.twig" %}
 			{% include "_partials/_flash.html.twig" %}
+			{% if app.user and app.user.isverified == false %}
+
+				<div class="alert alert-warning alert-dismissible" role="alert">
+					<button type="button" class="btn-close" data-bs-dismissible="alert" aria-label="Close"></button>
+					<div class="alert-message">
+						<strong>Your account have not activate yet</strong>
+						<a href="{{ path('app_activate_account', {token:app.user.token}) }}">Activate my account</a>
+					</div>
+				</div>
+			{% endif %}
 			{% block body %}{% endblock %}
 		</div>
 	</body>

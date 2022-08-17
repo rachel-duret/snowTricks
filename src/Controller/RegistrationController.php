@@ -13,7 +13,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -22,7 +22,7 @@ class RegistrationController extends AbstractController
         
     }
     #[Route('/register', name: 'app_register')]
-    public function register( Request $request, UserPasswordHasherInterface $userPasswordHasher, MailerInterface $mailer): Response
+    public function register( Request $request, TokenGeneratorInterface $tokenGeneratorInterface, UserPasswordHasherInterface $userPasswordHasher, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -37,24 +37,27 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            //Generate token
+            $token = $tokenGeneratorInterface->generateToken();
+            $user->setToken($token);
+            $user->setIsVerified(false);
 
             $this->em->persist($user);
             $this->em->flush($user);
-            // do anything else you need here, like send an email
-      
-            $url = $this->generateUrl('app_activate_account', ['username'=>$form->get('username')->getData()], UrlGeneratorInterface::ABSOLUTE_URL);
+            // Generate url to activate new account
+            $url = $this->generateUrl('app_activate_account', ['token'=>$token], UrlGeneratorInterface::ABSOLUTE_URL);
           
-            //Create date for email
+            //send an email
             $userEmail = $form->get('email')->getData();
-           $email = (new Email())
-           ->from('no-reply@snowtricks.com')
-           ->to($userEmail)
-           ->subject('Activate Account')
-           ->html("<p>$url</p>");
-           $mailer->send($email);
+            $email = (new Email())
+            ->from('no-reply@snowtricks.com')
+            ->to($userEmail)
+            ->subject('Activate Account')
+            ->html("<p>$url</p>");
+            $mailer->send($email);
 
             $this->addFlash('success', 'Account create successful, Please check your email to activate.');
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [
