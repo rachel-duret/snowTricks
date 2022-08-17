@@ -91,7 +91,7 @@ class TricksController extends AbstractController
             
             }
 
-            $this->addFlash('danger','Trick alredy exist.');
+            $this->addFlash('danger','Trick alredy exist. Please create another trick !');
 
         }
         return $this->render('tricks/create.html.twig',[
@@ -184,8 +184,8 @@ class TricksController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('app_home');
         }
-       
-                
+            $this->addFlash('danger','You do not have the right to delete this trick');
+            return $this->redirectToRoute('app_home'); 
     }
 
 }

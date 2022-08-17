@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activate Account
+{% endblock %}
+
+{% block body %}
+
+	<div class="container d-flex justify-content-center">
+
+		<div class="col-6 col-sm-6">
+			{{ form_start(activateForm) }}
+
+			<p>To activate your account , you just need click the button</p>
+
+			<button type="submit" class="btn btn-primary">Activate
+			</button>
+			{{ form_end(activateForm) }}
+		</div>
+	</div>
+
+
+{% endblock %}
