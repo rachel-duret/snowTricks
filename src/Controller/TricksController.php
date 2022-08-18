@@ -40,6 +40,7 @@ class TricksController extends AbstractController
     {
         $trick = new Trick();
         $category = new Category();
+        $video = new Video();
         $form = $this->createForm(TrickFormType::class, [$trick, $category]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
@@ -51,15 +52,30 @@ class TricksController extends AbstractController
             
             $name=$form->get('name')->getData();
             $category->setName($name);  
-        
+            $video->setVideoEmbedCode($form->get('videoEmbed')->getData());
+            //upload video
+            $videoPath = $form->get('video')->getData();
+            if ($videoPath) {
+                $newVideoFileName = uniqid().'.'.$videoPath->guessExtension();
+                try{
+                    $videoPath->move(
+                        $this->getParameter('kernel.project_dir') . '/public/uploads/', $newVideoFileName
+                    );
+                    
+                }catch (FileException $e){
+                    return new Response($e->getMessage());
+                }
+                $video->setVideoPath('/uploads/'.$newVideoFileName);
+
+            }
             //upload image
             $imagePath = $form->get('image')->getData();
-            
+          
             if($imagePath){
                 $newFileName = uniqid().'.'.$imagePath->guessExtension();
                 try{
                     $imagePath->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName
+                        $this->getParameter('kernel.project_dir') . '/public/uploads/', $newFileName
                     );
                     
                 }catch (FileException $e){
@@ -82,8 +98,10 @@ class TricksController extends AbstractController
             //relate trick to the category
             $trick->setCategory($category);
             $trick->addImage($image);
+            $trick->addVideo($video);
             $this->em->persist($trick);
             $this->em->persist($image);
+            $this->em->persist($video);
             $this->em->persist($category);
             $this->em->flush();
 

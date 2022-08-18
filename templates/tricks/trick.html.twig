@@ -24,11 +24,17 @@
 								</div>
 							</div>
 						{% endfor %}
+						{% for video in trick.videos %}
+							{% if video.videoPath %}
+								<iframe src="{{video.videoPath}}"></iframe>
+							{% endif %}
+							{% if video.videoEmbedCode %}
+								{{video.videoEmbedCode | raw}}
 
-						{# <div class="carousel-item">
-																																								<iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="d-block w-100"></iframe>
-																																								<div class="carousel-caption d-none d-md-block"></div>
-																																							</div> #}
+							{% endif %}
+
+						{% endfor %}
+
 
 					</div>
 				</div>
