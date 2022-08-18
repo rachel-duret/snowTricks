@@ -26,8 +26,22 @@
 							{{app.user? 'Logout' : 'Login'}}
 						</a>
 					</li>
+					{% if app.user %}
+						<li class="nav-item">
+							<a class="nav-link text-capitalize" href="{{path('app_profile', {id:app.user.id, username:app.user.username})}}">
+								{% if app.user.image %}
+									<img src="{{app.user.image}}" alt="">
+								{% else %}
+									<i class="bi bi-person-circle"></i>
+								{% endif %}
+								{{app.user.username}}
+							</a>
+						</li>
+					{% endif %}
+
 
 				</ul>
+
 			</div>
 		</div>
 	</nav>

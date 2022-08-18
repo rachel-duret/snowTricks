@@ -26,9 +26,9 @@
 						{% endfor %}
 
 						{# <div class="carousel-item">
-																																		<iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="d-block w-100"></iframe>
-																																		<div class="carousel-caption d-none d-md-block"></div>
-																																	</div> #}
+																																								<iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="d-block w-100"></iframe>
+																																								<div class="carousel-caption d-none d-md-block"></div>
+																																							</div> #}
 
 					</div>
 				</div>
@@ -49,9 +49,9 @@
 					</p>
 				</div>
 				{% if app.user and app.user==trick.user  %}
-					<a class="btn btn-primary" href="{{ path('app_upload_file', {id: trick.id}) }}" role="button">Upload file</a>
-					<a class="btn btn-primary" href="{{ path('app_update', {id: trick.id}) }}" role="button">Update</a>
-					<a class="btn btn-danger " href="{{ path('app_delete', {id: trick.id}) }}" role="button">Delete</a>
+					<a class="btn btn-primary" href="{{ path('app_upload_file', {id: trick.id, title:trick.title}) }}" role="button">Upload file</a>
+					<a class="btn btn-primary" href="{{ path('app_update', {id: trick.id, title:trick.title}) }}" role="button">Update</a>
+					<a class="btn btn-danger " href="{{ path('app_delete', {id: trick.id, title:trick.title}) }}" role="button">Delete</a>
 				{% endif %}
 
 			</div>

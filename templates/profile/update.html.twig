@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile Update
+{% endblock %}
+
+{% block body %}
+	<div class="container d-flex flex-column  justify-content-evenly">
+		<div class="row ">
+			<div class="col-8 d-flex flex-column  justify-content-center ">
+				<h1 class="text-capitalize">
+					{{user.username}}Profile Update</h1>
+
+				<div class="col-5 d-flex justify-content-md-between justify-content-center  mt-4 mb-4">
+					<img src="{{user.image}}" class="img-fluid  w-100" alt="User image">
+
+				</div>
+
+
+				{{form_start(form)}}
+				{{form_widget(form)}}
+				<button type="submit" class="btn btn-primary">Update Profile</button>
+				{{ form_end(form) }}
+			</div>
+
+		</div>
+	</div>
+{% endblock %}

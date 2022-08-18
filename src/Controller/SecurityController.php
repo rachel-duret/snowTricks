@@ -28,12 +28,6 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
-      
-        /* if($user->getToken() ==null){
-            $this->addFlash('danger', 'Activate your account first !');
-            $url = $this->generateUrl('app_activate_account', ['username'=>$user->getUsername()], UrlGeneratorInterface::ABSOLUTE_URL);
-            return  $this->redirectToRoute($url);
-        } */
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
