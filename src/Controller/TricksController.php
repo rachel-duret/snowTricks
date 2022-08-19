@@ -39,19 +39,15 @@ class TricksController extends AbstractController
     public function create(Request $request): Response
     {
         $trick = new Trick();
-        $category = new Category();
         $video = new Video();
-        $form = $this->createForm(TrickFormType::class, [$trick, $category]);
+        $newCategory = new Category();
+        $form = $this->createForm(TrickFormType::class, [$trick, $newCategory]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             // To check trick already exist or not
             $newTrick = $this->trickRepository->findBy(['title'=>$form->get('title')->getData()]);
             if(!$newTrick){
 
-            //set Category
-            
-            $name=$form->get('name')->getData();
-            $category->setName($name);  
             $video->setVideoEmbedCode($form->get('videoEmbed')->getData());
             //upload video
             $videoPath = $form->get('video')->getData();
@@ -68,6 +64,7 @@ class TricksController extends AbstractController
                 $video->setVideoPath('/uploads/'.$newVideoFileName);
 
             }
+            $trick->addVideo($video);
             //upload image
             $imagePath = $form->get('image')->getData();
           
@@ -86,6 +83,7 @@ class TricksController extends AbstractController
                
             
             }
+            $trick->addImage($image);
             //set Trick
             $title=$form->get('title')->getData();
             $description=$form->get('description')->getData();
@@ -94,15 +92,24 @@ class TricksController extends AbstractController
             $trick->setCreatAt(new DateTimeImmutable());
             $trick->setUser($this->getUser());
           
-    
-            //relate trick to the category
-            $trick->setCategory($category);
-            $trick->addImage($image);
-            $trick->addVideo($video);
+            //set Category          
+           
+            $name=$form->get('name')->getData();
+            $category = $this->categoryRepository->findOneBy(['name'=>$name]);
+            if ($category) {
+                $trick->setCategory($category);
+                $this->em->persist($category);
+            } else {
+                $newCategory->setName($name);  
+                $trick->setCategory($newCategory);
+                $this->em->persist($newCategory);
+            }
+          
+        
+           
             $this->em->persist($trick);
             $this->em->persist($image);
             $this->em->persist($video);
-            $this->em->persist($category);
             $this->em->flush();
 
             return $this->redirectToRoute('app_home');
@@ -165,21 +172,24 @@ class TricksController extends AbstractController
     public function update($id, Request $request):Response
     {
       $trick =$this->trickRepository->find($id);
-      $category = $this->categoryRepository->find($trick->getId());
       $form = $this->createForm(TrickUpdateFormType::class, $trick);
       $form->handleRequest($request);
    
 
       if($form->isSubmitted() && $form->isValid()){
-        
-        
+        $newTrick = $this->trickRepository->findBy(['title'=>$form->get('title')->getData()]);
+        if(!$newTrick){
             $trick->setTitle($form->get('title')->getData());
             $trick->setDescription($form->get('description')->getData());
             $trick->setUpdateAt(new DateTimeImmutable());
             $trick->setCategory($form->get('category')->getData());
 
             $this->em->flush();
-            return $this->redirectToRoute('app_trick', array('id'=>$trick->getId()));    
+            return $this->redirectToRoute('app_trick', array('id'=>$trick->getId())); 
+        }
+        $this->addFlash('danger','Trick alredy exist. Please create another trick !');
+        
+              
       }
      
       return $this->render('tricks/update.html.twig', [

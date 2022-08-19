@@ -82,6 +82,8 @@ class FileController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('app_trick', array('id'=>$trick->getId()));
         }
+        $this->addFlash('danger','You do not have the right to delete this picture.');
+        return $this->redirectToRoute('app_trick', ['id'=>$id]); 
        
     }
 }
