@@ -19,17 +19,16 @@ class RegistrationController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $em)
     {
-        
     }
     #[Route('/register', name: 'app_register')]
-    public function register( Request $request, TokenGeneratorInterface $tokenGeneratorInterface, UserPasswordHasherInterface $userPasswordHasher, MailerInterface $mailer): Response
+    public function register(Request $request, TokenGeneratorInterface $tokenGeneratorInterface, UserPasswordHasherInterface $userPasswordHasher, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -45,15 +44,15 @@ class RegistrationController extends AbstractController
             $this->em->persist($user);
             $this->em->flush($user);
             // Generate url to activate new account
-            $url = $this->generateUrl('app_activate_account', ['token'=>$token], UrlGeneratorInterface::ABSOLUTE_URL);
-          
+            $url = $this->generateUrl('app_activate_account', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
             //send an email
             $userEmail = $form->get('email')->getData();
             $email = (new Email())
-            ->from('no-reply@snowtricks.com')
-            ->to($userEmail)
-            ->subject('Activate Account')
-            ->html("<p>$url</p>");
+                ->from('no-reply@snowtricks.com')
+                ->to($userEmail)
+                ->subject('Activate Account')
+                ->html("<p>$url</p>");
             $mailer->send($email);
 
             $this->addFlash('success', 'Account create successful, Please check your email to activate.');
@@ -64,6 +63,4 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-
-
 }

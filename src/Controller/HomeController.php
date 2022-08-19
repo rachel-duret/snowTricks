@@ -12,29 +12,28 @@ class HomeController extends AbstractController
 
     public function __construct(private TrickRepository $trickRepository)
     {
-        
-    }
-    
-    #[Route('/', methods:['GET'] ,name: 'app_home')]
-    public function index(): Response
-    {
-        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC'],10,0);
-      
-        return $this->render('home/index.html.twig', [
-            'tricks' => $tricks,
-    
-        ]);
-       
     }
 
-    #[Route("/tricks", methods:['GET'], name:"app_tricks")]
-    public function loadMore(){
-        $tricks = $this->trickRepository->findBy([],['creatAt'=>'DESC']);
-    
+    #[Route('/', methods: ['GET'], name: 'app_home')]
+    public function index(): Response
+    {
+        $tricks = $this->trickRepository->findBy([], ['creatAt' => 'DESC'], 10, 0);
+
+        return $this->render('home/index.html.twig', [
+            'tricks' => $tricks,
+
+        ]);
+    }
+
+    #[Route("/tricks", methods: ['GET'], name: "app_tricks")]
+    public function loadMore()
+    {
+        $tricks = $this->trickRepository->findBy([], ['creatAt' => 'DESC']);
+
 
         return $this->render('home/tricks.html.twig', [
             'tricks' => $tricks,
-           
+
         ]);
     }
 }
