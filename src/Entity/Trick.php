@@ -168,7 +168,7 @@ class Trick
     }
     //comment
      /**
-     * @return Collection<int, Video>
+     * @return Collection<int, Comment>
      */
     public function getComments(): Collection
     {
