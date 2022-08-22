@@ -73,6 +73,49 @@ class SecurityController extends AbstractController
     }
 
 
+    // Reactivate account
+    #[Route('/reactivate_account', name:'app_reactivate_account')]
+    public function reactivateAccount( Request $request,
+                                       TokenGeneratorInterface $tokenGeneratorInterface,
+                                       MailerInterface $mailer):Response
+    {
+        $form = $this->createForm(ForgottenPasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $this->userRepository->findOneBy(['email' => $email]);
+
+            // Generate a new token
+            if ($user) {
+                if ($user->isIsVerified()){
+                $this->addFlash('danger', 'Your account already activated Please login!');
+                    return $this->redirectToRoute('app_login');
+                }
+                $token=$user->getToken();
+                //send a link to reset password
+                $url = $this->generateUrl('app_activate_account', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+                // create data for email
+                $context = compact('url', 'user');
+                $mail = (new Email())
+                    ->from('no-reply@snowtricks.com')
+                    ->to($email)
+                    ->subject('Ractivate Account')
+                    ->html("<p>$url</p>");
+                $mailer->send($mail);
+                $this->addFlash('success', 'Email already send. please check your email !');
+                return $this->redirectToRoute('app_login');
+            }
+            //$this->addFlash('danger', 'User do not exist .');
+            $this->addFlash('danger', 'User does not exist !');
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/reactivate_account.html.twig',[
+            'reactivateAccountForm' => $form->createView()
+        ]);
+    }
+
     /* ***********************Forgotten Password*************************** */
     #[Route('/forgotten_password', name: 'app_forgotten_password')]
     public function token(
@@ -98,12 +141,12 @@ class SecurityController extends AbstractController
                 $url = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                 // create data for email
                 $context = compact('url', 'user');
-                $email = (new Email())
+                $mail = (new Email())
                     ->from('no-reply@snowtricks.com')
-                    ->to('chuncheung.ku@gmail.com')
+                    ->to($email)
                     ->subject('Reset Password')
                     ->html("<p>$url</p>");
-                $mailer->send($email);
+                $mailer->send($mail);
                 $this->addFlash('success', 'Email already send. please check your email !');
                 return $this->redirectToRoute('app_login');
             }
