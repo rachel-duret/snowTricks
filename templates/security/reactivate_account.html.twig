@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activate Account
+{% endblock %}
+
+{% block body %}
+
+	<div class="container d-flex justify-content-center">
+
+		<div class="col-6 col-sm-6">
+			<h1>
+				Reactivate My Account</h1>
+			{{ form_start(reactivateAccountForm) }}
+			{{ form_row(reactivateAccountForm.email) }}
+			<button type="submit" class="btn btn-primary">Send</button>
+			{{ form_end(reactivateAccountForm) }}
+		</div>
+	</div>
+
+{% endblock %}
