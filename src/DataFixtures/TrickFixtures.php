@@ -5,9 +5,12 @@ namespace App\DataFixtures;
 use App\Entity\Trick;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TrickFixtures extends Fixture
+
+class TrickFixtures extends Fixture implements DependentFixtureInterface
+
 {
     public function load(ObjectManager $manager): void
     {
@@ -24,7 +27,7 @@ class TrickFixtures extends Fixture
         $trick1 = new Trick();
         $trick1->setUser($this->getReference('user_1'));
         $trick1->setCategory($this->getReference('category'));
-        $trick1->setTitle('mute');
+        $trick1->setTitle('mute1');
         $trick1->setDescription('This trick is good for beginner.');
         $trick1->setCreatAt(new DateTimeImmutable());
         $manager->persist($trick1);
@@ -34,5 +37,13 @@ class TrickFixtures extends Fixture
 
         $this->addReference('trick', $trick);
         $this->addReference('trick_1', $trick);
+    }
+
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+            CategoryFixtures::class,
+        ];
     }
 }

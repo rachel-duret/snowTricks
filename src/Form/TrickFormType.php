@@ -35,7 +35,7 @@ class TrickFormType extends AbstractType
         ->add('description', TextareaType::class, [
             'attr'=> array(
                 'class'=>'form-control mb-3',
-                'placeholder'=>'Trick title..'
+                'placeholder'=>''
             ),
             'label'=>false
         ])

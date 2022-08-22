@@ -34,7 +34,7 @@ class ProfileController extends AbstractController
                 'tricks' => $tricks
             ]);
         }
-        $this->addFlash('danger', 'Page not find');
+        $this->addFlash('danger', 'Page not found .');
         return $this->redirectToRoute('app_home');
     }
 
@@ -66,6 +66,7 @@ class ProfileController extends AbstractController
                     $this->addFlash('success', 'Your profile already update .');
                     return $this->redirectToRoute('app_profile', array('id' => $user->getId(), 'username' => $user->getUsername()));
                 }
+
             }
 
 
@@ -75,5 +76,8 @@ class ProfileController extends AbstractController
                 'user' => $user
             ]);
         }
+
+        $this->addFlash('danger', 'Page not found .');
+        return $this->redirectToRoute('app_home');
     }
 }

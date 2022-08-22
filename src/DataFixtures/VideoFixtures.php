@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class VideoFixtures extends Fixture
+class VideoFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -21,5 +22,12 @@ class VideoFixtures extends Fixture
        $manager->persist($video1);
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            TrickFixtures::class,
+        ];
     }
 }

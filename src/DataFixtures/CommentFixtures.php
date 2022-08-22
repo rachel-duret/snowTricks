@@ -5,9 +5,10 @@ namespace App\DataFixtures;
 use App\Entity\Comment;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class CommentFixtures extends Fixture
+class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -19,4 +20,12 @@ class CommentFixtures extends Fixture
         $manager->persist($comment);
         $manager->flush();
     }
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+            TrickFixtures::class
+        ];
+    }
+
 }

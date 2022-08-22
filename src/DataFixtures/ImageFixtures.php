@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ImageFixtures extends Fixture
+class ImageFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -23,4 +24,12 @@ class ImageFixtures extends Fixture
         
         $manager->flush();
     }
+
+    public function getDependencies()
+    {
+        return [
+            TrickFixtures::class,
+        ];
+    }
+
 }
