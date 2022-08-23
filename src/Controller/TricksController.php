@@ -120,11 +120,12 @@ class TricksController extends AbstractController
 
 
     // Single Trick 
-    #[Route('/tricks/{id}', methods: ['GET', 'POST'], name: 'app_trick')]
-    public function trick($id, Request $request): Response
+    #[Route('/tricks/{title}', methods: ['GET', 'POST'], name: 'app_trick')]
+    public function trick($title, Request $request): Response
     {
-        $trick = $this->trickRepository->find($id);
+        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
         $user = $trick->getUser();
+      
         // show comments,
         $comments = $this->commentRepository->findBy(['trick' => $trick], ['createAt' => 'DESC'], 10, 0);
 
@@ -144,7 +145,7 @@ class TricksController extends AbstractController
             $this->em->persist($comment);
             $this->em->flush($comment);
 
-            return $this->redirectToRoute('app_trick', array('id' => $trick->getId()));
+            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
         }
 
 
@@ -160,10 +161,10 @@ class TricksController extends AbstractController
 
 
     // Update
-    #[Route('/tricks/update/{id}/{title}', methods: ['GET', 'POST'], name: 'app_update')]
-    public function update($id, Request $request): Response
+    #[Route('/tricks/update/{title}', methods: ['GET', 'POST'], name: 'app_update')]
+    public function update($title, Request $request): Response
     {
-        $trick = $this->trickRepository->find($id);
+        $trick = $this->trickRepository->findOneBy(['title'=> $title]);
         $form = $this->createForm(TrickUpdateFormType::class, $trick);
         $form->handleRequest($request);
 
@@ -177,7 +178,7 @@ class TricksController extends AbstractController
                 $trick->setCategory($form->get('category')->getData());
 
                 $this->em->flush();
-                return $this->redirectToRoute('app_trick', array('id' => $trick->getId()));
+                return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
             }
             $this->addFlash('danger', 'Trick alredy exist. Please create another trick !');
         }
@@ -190,10 +191,10 @@ class TricksController extends AbstractController
     }
 
     // Delete 
-    #[Route('/tricks/delete/{id}', methods: ['GET', 'DELETE'], name: 'app_delete')]
-    public function delete($id): Response
+    #[Route('/tricks/delete/{title}', methods: ['GET', 'DELETE'], name: 'app_delete')]
+    public function delete($title): Response
     {
-        $trick = $this->trickRepository->find($id);
+        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
         $user = $this->getUser();
         if ($user == $trick->getUser()) {
 

@@ -19,10 +19,10 @@ class FileController extends AbstractController
     public function __construct(private TrickRepository $trickRepository, private ImageRepository $imageRepository, private EntityManagerInterface $em)
     {
     }
-    #[Route('/upload_file/{id}', methods: ['GET', 'POST'], name: 'app_upload_file')]
-    public function index(Request $request, $id): Response
+    #[Route('/upload_file/{title}', methods: ['GET', 'POST'], name: 'app_upload_file')]
+    public function index(Request $request, $title): Response
     {
-        $trick = $this->trickRepository->find($id);
+        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
         $form = $this->createForm(ImageFormType::class);
         $form->handleRequest($request);
 
@@ -58,7 +58,7 @@ class FileController extends AbstractController
 
                 $this->em->flush();
 
-                return $this->redirectToRoute('app_trick', array('id' => $trick->getId()));
+                return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
             }
         }
         return $this->render('file/index.html.twig', [
@@ -72,14 +72,15 @@ class FileController extends AbstractController
         $image = $this->imageRepository->find($id);
         $user = $this->getUser();
         $trick = $image->getTrick();
+      
 
         if ($user == $trick->getUser()) {
 
             $this->em->remove($image);
             $this->em->flush();
-            return $this->redirectToRoute('app_trick', array('id' => $trick->getId()));
+            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
         }
         $this->addFlash('danger', 'You do not have the right to delete this picture.');
-        return $this->redirectToRoute('app_trick', ['id' => $id]);
+        return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
     }
 }
