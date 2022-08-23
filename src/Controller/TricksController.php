@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -121,13 +122,18 @@ class TricksController extends AbstractController
 
     // Single Trick 
     #[Route('/tricks/{title}', methods: ['GET', 'POST'], name: 'app_trick')]
-    public function trick($title, Request $request): Response
+    public function trick($title, Request $request, PaginatorInterface $paginator): Response
     {
         $trick = $this->trickRepository->findOneBy(['title'=>$title]);
         $user = $trick->getUser();
       
         // show comments,
-        $comments = $this->commentRepository->findBy(['trick' => $trick], ['createAt' => 'DESC'], 10, 0);
+        $data = $this->commentRepository->findBy(['trick' => $trick], ['createAt' => 'DESC'], 10, 0);
+        $comments = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         // Create comment
         $user = $this->getUser();
