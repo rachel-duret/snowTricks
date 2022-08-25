@@ -12,7 +12,6 @@
 					<div class="card  mt-4 mb-4">
 						{% for image in trick.images %}
 							<div class="carousel-inner">
-
 								<div class="carousel-item active" data-bs-interval="10000">
 
 									{% if app.user and app.user is same as trick.user %}
@@ -21,7 +20,7 @@
 										</a>
 									{% endif %}
 
-									<img src="{{image.imagePath}}" class="d-block w-100" alt="{{ trick.title }}">
+									<img src="{{image.imagePath}}" class="d-block w-100 " alt="{{ trick.title }}">
 									<div class="carousel-caption d-none d-md-block"></div>
 								</div>
 							</div>
@@ -42,24 +41,25 @@
 				</div>
 			</div>
 			<div class="col-12 col-sm-6">
-				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
-					<h2>{{trick.title}}</h2>
-					<p>
-						Category:<strong class="text-capitalize">{{trick.category.name}}</strong>
+				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center text-secondary">
+					<h2 class="text-uppercase mt-5">{{trick.title}}</h2>
+					<p class="">
+						Category:<strong class="text-capitalize ">{{trick.category.name}}</strong>
 
 					</p>
 					<p class="text-capitalize">{{trick.description}}</p>
 					<p>
-						Created by:<strong class="text-capitalize">{{trick.user.username}}</strong>
+						Created by:<strong class="text-capitalize">
+							{{trick.user.username}}</strong>
 					</p>
 					<p>
 						Created at:<strong>{{trick.creatAt|date("D-M-Y H:i:s ")}}</strong>
 					</p>
 				</div>
 				{% if app.user and app.user==trick.user  %}
-					<a class="btn btn-primary" href="{{ path('app_upload_file', {title:trick.title}) }}" role="button">Upload file</a>
-					<a class="btn btn-primary" href="{{ path('app_update', {title:trick.title}) }}" role="button">Update</a>
-					<a class="btn btn-danger " href="{{ path('app_delete', {title:trick.title}) }}" role="button">Delete</a>
+					<a class="btn btn-primary opacity-75" href="{{ path('app_upload_file', {title:trick.title}) }}" role="button">Upload file</a>
+					<a class="btn btn-primary opacity-75" href="{{ path('app_update', {title:trick.title}) }}" role="button">Update</a>
+					<a class="btn btn-danger opacity-75" href="{{ path('app_delete', {title:trick.title}) }}" role="button">Delete</a>
 				{% endif %}
 
 			</div>
@@ -69,37 +69,64 @@
 			<h2>Comments</h2>
 			<div class="col text-center">
 				{% for comment in comments %}
-					<p class="text-capitalize">{{comment.comment}}</p>
-					<div class="d-flex px-5  ">
-						<p>
-							Commented at:<strong class="text-capitalize">{{comment.createAt|date("D-M-Y H:i:s ")}}
-							</strong>
+					<div class="row">
+						<div class="col">
+							<p class="text-capitalize">{{comment.comment}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-3">
+							<p>
+								Commented at:<strong class="text-capitalize">{{comment.createAt|date("D-M-Y H:i:s ")}}
+								</strong>
+
+							</p>
+						</div>
+						<div class="col-3">
 							-By:<strong class="text-capitalize">{{comment.user.username}}</strong>
-						</p>
-						{% if comment.user.image %}
-							<img src="{{comment.user.image}}" alt="">
-						{% else %}
-							<a href="#" class="link link-secondry ml-5">
-								<i class="bi bi-person-circle"></i>
+
+							<a href="{{path('app_profile', {id:comment.user.id, username:comment.user.username})}}" class="link link-secondry ml-5">
+								{% if comment.user.image %}
+									<img src="{{comment.user.image}}" alt="profile image" style="width:30px" class="rounded-circle">
+								{% else %}
+									<i class="bi bi-person-circle"></i>
+
+								{% endif %}
 							</a>
 
-						{% endif %}
-					</p>
+						</div>
+					</div>
+					<hr>
 
+				{% endfor %}
+				<div class="d-flex justify-content-center ">
+					{% do comments.setPageRange(2) %}
+					{{ knp_pagination_render(comments, 'pagination.html.twig') }}
 
 				</div>
-				<hr>
+			</div>
+			<div>
+				{% if app.user %}
+					{{ form_start(commentForm) }}
+					{{form_row(commentForm.comment)}}
+					<button type="submit" class="btn btn-primary opacity-75">Comment</button>
+					{{ form_end(commentForm) }}
+				{% endif %}
 
-			{% endfor %}
-		</div>
-		<div>
-			{% if app.user %}
-				{{ form_start(commentForm) }}
-				{{form_row(commentForm.comment)}}
-				<button type="submit" class="btn btn-primary">Comment</button>
-				{{ form_end(commentForm) }}
-			{% endif %}
-
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}
+
+
+	{# ************************ #}
+	<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="..." class="d-block w-100" alt="...">
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}
