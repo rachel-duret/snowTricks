@@ -128,7 +128,7 @@ class TricksController extends AbstractController
         $user = $trick->getUser();
       
         // show comments,
-        $data = $this->commentRepository->findBy(['trick' => $trick], ['createAt' => 'DESC'], 10, 0);
+        $data = $this->commentRepository->findBy(['trick' => $trick], ['createAt' => 'DESC']);
         $comments = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),

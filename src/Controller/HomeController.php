@@ -19,7 +19,7 @@ class HomeController extends AbstractController
     #[Route('/', methods: ['GET'], name: 'app_home')]
     public function index(PaginatorInterface $paginator, Request $request): Response
     {
-        $data = $this->trickRepository->findBy([], ['creatAt' => 'DESC'], 10, 0);
+        $data = $this->trickRepository->findBy([], ['creatAt' => 'DESC']);
 
         $tricks = $paginator->paginate(
             $data,

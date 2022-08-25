@@ -9,6 +9,7 @@ use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,6 +77,10 @@ class FileController extends AbstractController
 
         if ($user == $trick->getUser()) {
 
+            $fileName = $image->getImagePath();
+            $fileSystem = new Filesystem();
+            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public/uploads',
+            $fileName);
             $this->em->remove($image);
             $this->em->flush();
             return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
