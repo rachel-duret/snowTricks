@@ -6,18 +6,15 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\Video;
 use App\Form\CommentFromType;
 use App\Form\TrickFormType;
 use App\Form\TrickUpdateFormType;
-use App\Form\TrickUpdateType;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
-use DateTime;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -176,8 +173,9 @@ class TricksController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newTrick = $this->trickRepository->findBy(['title' => $form->get('title')->getData()]);
-            if (!$newTrick) {
+
+            $newTrick = $this->trickRepository->findOneBy(['title' => $form->get('title')->getData()]);
+            if (!$newTrick || $trick === $newTrick) {
                 $trick->setTitle($form->get('title')->getData());
                 $trick->setDescription($form->get('description')->getData());
                 $trick->setUpdateAt(new DateTimeImmutable());

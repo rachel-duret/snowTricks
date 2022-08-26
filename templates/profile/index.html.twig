@@ -29,7 +29,7 @@
 				{% for trick in tricks %}
 					<div class="col m-auto ">
 						<div class="card mt-5" style="width: 14rem;">
-							<a href="{{path('app_trick',{id:trick.id, title: trick.title}) }}" class="text-decoration-none arrow-color">
+							<a href="{{path('app_trick',{ title: trick.title}) }}" class="text-decoration-none arrow-color">
 								{% for image in trick.images[:1] %}
 									<img class="card-img-top" src="{{image.imagePath}}" alt="{{trick.title}}">
 								{% endfor %}
@@ -37,15 +37,15 @@
 
 							</a>
 							<div class="card-body d-flex flex-md-row justify-content-md-between  ">
-								<a href="{{path('app_trick',{id:trick.id, title: trick.title}) }}" class="text-decoration-none arrow-color">
+								<a href="{{path('app_trick',{ title: trick.title}) }}" class="text-decoration-none arrow-color">
 									<h5 class="card-title text-secondary">{{trick.title}}</h5>
 								</a>
 								<div>
 									{% if app.user and app.user==trick.user  %}
-										<a class="link link-success text-decoration-none opacity-50" href="{{ path('app_update', {id: trick.id, title: trick.title}) }}">
+										<a class="link link-success text-decoration-none opacity-50" href="{{ path('app_update', {title: trick.title}) }}">
 											<i class="bi bi-pencil-fill"></i>
 										</a>
-										<a class="link link-danger text-decoration-none opacity-50" href="{{ path('app_delete', {id: trick.id, title: trick.title}) }}">
+										<a class="link link-danger text-decoration-none opacity-50" href="{{ path('app_delete', { title: trick.title}) }}">
 											<i class="bi bi-trash bi-danger"></i>
 										</a>
 									{% endif %}

@@ -7,6 +7,7 @@ use App\Entity\Video;
 use App\Form\ImageFormType;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,7 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FileController extends AbstractController
 {
-    public function __construct(private TrickRepository $trickRepository, private ImageRepository $imageRepository, private EntityManagerInterface $em)
+    public function __construct(private TrickRepository $trickRepository, 
+                                private ImageRepository $imageRepository, 
+                                private VideoRepository $videoRepository, 
+                                private EntityManagerInterface $em)
     {
     }
     #[Route('/upload_file/{title}', methods: ['GET', 'POST'], name: 'app_upload_file')]
@@ -68,7 +72,7 @@ class FileController extends AbstractController
     }
 
     #[Route("/delete_image/{id}", methods: ['GET', 'DELETE'], name: "app_delete_image")]
-    public function deleteFile($id): Response
+    public function deleteImageFile($id): Response
     {
         $image = $this->imageRepository->find($id);
         $user = $this->getUser();
@@ -79,13 +83,35 @@ class FileController extends AbstractController
 
             $fileName = $image->getImagePath();
             $fileSystem = new Filesystem();
-            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public/uploads',
+            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
             $fileName);
             $this->em->remove($image);
             $this->em->flush();
             return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
         }
         $this->addFlash('danger', 'You do not have the right to delete this picture.');
+        return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+    }
+
+    #[Route("/delete_video/{id}", methods: ['GET', 'DELETE'], name: "app_delete_video")]
+    public function deleteVideoFile($id): Response
+    {
+        $video = $this->videoRepository->find($id);
+        $user = $this->getUser();
+        $trick = $video->getTrick();
+      
+
+        if ($user == $trick->getUser()) {
+
+            $fileName = $video->getVideoPath();
+            $fileSystem = new Filesystem();
+            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+            $fileName);
+            $this->em->remove($video);
+            $this->em->flush();
+            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+        }
+        $this->addFlash('danger', 'You do not have the right to delete this video');
         return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
     }
 }

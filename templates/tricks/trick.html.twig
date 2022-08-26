@@ -9,34 +9,64 @@
 			<div class="col-12 col-sm-6">
 				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
 
-					<div class="card  mt-4 mb-4">
-						{% for image in trick.images %}
+					<div class="card  mt-4 mb-4 p-0">
+						<div id="carouselImageControls" class="carousel slide" data-bs-ride="carousel">
 							<div class="carousel-inner">
-								<div class="carousel-item active" data-bs-interval="10000">
+								{% for image in trick.images %}
+									<div class="carousel-item active">
+										{% if app.user and app.user is same as trick.user %}
+											<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+												<i class="bi bi-x-circle-fill"></i>
+											</a>
+											<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
+										{% endif %}
+									</div>
+								{% endfor %}
 
-									{% if app.user and app.user is same as trick.user %}
-										<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute top-0 end-0">
-											<i class="bi bi-x-circle-fill"></i>
-										</a>
-									{% endif %}
-
-									<img src="{{image.imagePath}}" class="d-block w-100 " alt="{{ trick.title }}">
-									<div class="carousel-caption d-none d-md-block"></div>
-								</div>
 							</div>
-						{% endfor %}
-						{% for video in trick.videos %}
-							{% if video.videoPath %}
-								<iframe src="{{video.videoPath}}"></iframe>
-							{% endif %}
-							{% if video.videoEmbedCode %}
-								{{video.videoEmbedCode | raw}}
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageControls" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselImageControls" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
 
-							{% endif %}
+					</div>
+					<div class="card mt-4 mb-4 p-0">
+						<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
+							<div class="carousel-inner">
+								{% for video in trick.videos %}
+									<div class="carousel-item active">
+										{% if app.user and app.user is same as trick.user %}
+											<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute z-index top-0 end-0" style="z-index: 9999;">
+												<i class="bi bi-x-circle-fill"></i>
+											</a>
+											{% if video.videoPath %}
+												<div class="ratio ratio-16x9 rounded">
+													<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+												</div>
+											{% endif %}
+											{% if video.videoEmbedCode %}
+												{{video.videoEmbedCode | raw}}
 
-						{% endfor %}
+											{% endif %}
+										{% endif %}
+									</div>
+								{% endfor %}
 
-
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon btn-dark" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="next">
+								<span class="carousel-control-next-icon btn-dark" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
