@@ -21,19 +21,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TricksController extends AbstractController
 {
 
-    public function __construct(private TrickRepository $trickRepository, private ImageRepository $imageRepository, private CategoryRepository $categoryRepository, private VideoRepository $videoRepository, private CommentRepository $commentRepository, private EntityManagerInterface $em)
+    public function __construct(private TrickRepository $trickRepository, 
+                                private ImageRepository $imageRepository, 
+                                private CategoryRepository $categoryRepository, 
+                                private VideoRepository $videoRepository,
+                                private CommentRepository $commentRepository, 
+                                private EntityManagerInterface $em)
     {
     }
 
     #[Route('/create', methods: ['GET', 'POST'], name: 'app_create')]
-    public function create(Request $request): Response
+    public function create(Request $request, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $video = new Video();
@@ -80,10 +87,11 @@ class TricksController extends AbstractController
                 $trick->addImage($image);
                 //set Trick
                 $title = $form->get('title')->getData();
+                $slug = $slugger->slug('fs flate');
                 $description = $form->get('description')->getData();
-                $trick->setTitle($title);
+                $trick->setTitle($slug);
                 $trick->setDescription($description);
-                $trick->setCreatAt(new DateTimeImmutable());
+                $trick->setcreatedAt(new DateTimeImmutable());
                 $trick->setUser($this->getUser());
 
                 //set Category          
@@ -178,7 +186,7 @@ class TricksController extends AbstractController
             if (!$newTrick || $trick === $newTrick) {
                 $trick->setTitle($form->get('title')->getData());
                 $trick->setDescription($form->get('description')->getData());
-                $trick->setUpdateAt(new DateTimeImmutable());
+                $trick->setupdatedAt(new DateTimeImmutable());
                 $trick->setCategory($form->get('category')->getData());
 
                 $this->em->flush();
@@ -201,7 +209,29 @@ class TricksController extends AbstractController
         $trick = $this->trickRepository->findOneBy(['title'=>$title]);
         $user = $this->getUser();
         if ($user == $trick->getUser()) {
+            // delete images in the file system
+            $images = $trick->getImages();
+            if ($images) {
+                foreach($images as $image ){
+                    $fileImageName = $image->getImagePath();
+                    $fileSystem = new Filesystem();
+                    $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+                    $fileImageName);
+                }
+            }
 
+            // delete videos in the file system
+            $videos = $trick->getVideos();
+            if ($videos) {
+                foreach ($videos as $video) {
+                    $videoFileName = $video->getVideoPath();
+                    $fileSystem = new Filesystem();
+                    $fileSystem->remove( $this->getParameter('kernel.project_dir').'/public'.$videoFileName);
+                }
+            }
+            
+           
+         
             $this->em->remove($trick);
             $this->em->flush();
             return $this->redirectToRoute('app_home');

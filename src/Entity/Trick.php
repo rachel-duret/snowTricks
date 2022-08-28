@@ -23,10 +23,10 @@ class Trick
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $creatAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updateAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
 
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class,cascade:['remove'])]
@@ -44,7 +44,6 @@ class Trick
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
-
    
 
     public function __construct()
@@ -82,26 +81,26 @@ class Trick
         return $this;
     }
 
-    public function getCreatAt(): ?\DateTimeImmutable
+    public function getcreatedAt(): ?\DateTimeImmutable
     {
-        return $this->creatAt;
+        return $this->createdAt;
     }
 
-    public function setCreatAt(\DateTimeImmutable $creatAt): self
+    public function setcreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->creatAt = $creatAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getupdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(?\DateTimeImmutable $updateAt): self
+    public function setupdatedAt(?\DateTimeImmutable $updatedAt): self
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -221,6 +220,7 @@ class Trick
 
         return $this;
     }
+
 
 
    

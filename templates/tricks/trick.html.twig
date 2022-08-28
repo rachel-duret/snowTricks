@@ -83,7 +83,7 @@
 							{{trick.user.username}}</strong>
 					</p>
 					<p>
-						Created at:<strong>{{trick.creatAt|date("D-M-Y H:i:s ")}}</strong>
+						Created at:<strong>{{trick.createdAt|date("D-M-Y H:i:s ")}}</strong>
 					</p>
 				</div>
 				{% if app.user and app.user==trick.user  %}
@@ -147,16 +147,5 @@
 		</div>
 	</div>
 
-
-	{# ************************ #}
-	<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-		<div class="carousel-inner">
-			<div class="carousel-item active">
-				<img src="..." class="d-block w-100" alt="...">
-			</div>
-
-		</div>
-
-	</div>
 
 {% endblock %}

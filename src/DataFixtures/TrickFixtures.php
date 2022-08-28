@@ -29,7 +29,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         Once you’re in the air, relax and watch your landing spot.
         5.
         Land, absorbing the impact with your legs.');
-        $trick->setCreatAt(new DateTimeImmutable());
+        $trick->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick);
 
         //1
@@ -38,7 +38,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick1->setCategory($this->getReference('category_0'));
         $trick1->setTitle('nollie');
         $trick1->setDescription('A jump you make by springing off the nose of the board.');
-        $trick1->setCreatAt(new DateTimeImmutable());
+        $trick1->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick1);
         
         //2
@@ -56,7 +56,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         Once in the air, draw up your knees and find your landing spot.
         4.
         Land your board flat.');
-        $trick2->setCreatAt(new DateTimeImmutable());
+        $trick2->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick2);
 
         //3
@@ -65,7 +65,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick3->setCategory($this->getReference('category_1'));
         $trick3->setTitle('nose');
         $trick3->setDescription('Front hand grabs the nose of the board.');
-        $trick3->setCreatAt(new DateTimeImmutable());
+        $trick3->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick3);
         //4
         $trick4 = new Trick();
@@ -73,7 +73,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick4->setCategory($this->getReference('category_1'));
         $trick4->setTitle('mute');
         $trick4->setDescription('Front hand grabs toe edge between the bindings.');
-        $trick4->setCreatAt(new DateTimeImmutable());
+        $trick4->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick4);
         //5
         $trick5 = new Trick();
@@ -81,7 +81,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick5->setCategory($this->getReference('category_1'));
         $trick5->setTitle('melon');
         $trick5->setDescription('Front hand grabs the heel edge between the bindings.');
-        $trick5->setCreatAt(new DateTimeImmutable());
+        $trick5->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick5);
         //6
         $trick6 = new Trick();
@@ -89,7 +89,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick6->setCategory($this->getReference('category_2'));
         $trick6->setTitle('fs boarfslide');
         $trick6->setDescription('Sliding down the obstacle with your board into a 90° position to the rail, facing uphill. Rail is between your bindings. You bring the nose over the rail during entry.');
-        $trick6->setCreatAt(new DateTimeImmutable());
+        $trick6->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick6);
         //7
         $trick7 = new Trick();
@@ -103,7 +103,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         Snap and bring the rear of the board over the rail, supporting yourself on your back leg.
         3.
         Be careful not to catch the rail during entry. Give yourself some space and bring the board over the rail clean.');
-        $trick7->setCreatAt(new DateTimeImmutable());
+        $trick7->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick7);
         //8
         $trick8 = new Trick();
@@ -119,7 +119,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         The moment your board goes over the edge of the quarter, place your arm on the edge and look down into the quarter. Do not look at your board. With your head pointed downward, try to keep your legs bent and perform a grab.
         4.
         A melon grab works best here. Hold this position until the board touches the snow. Now straighten up and ride away.');
-        $trick8->setCreatAt(new DateTimeImmutable());
+        $trick8->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick8);
         //9
         $trick9 = new Trick();
@@ -127,7 +127,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick9->setCategory($this->getReference('category_3'));
         $trick9->setTitle('tail');
         $trick9->setDescription('Pressuring either the nose or tail so that the opposite end lifts off of the snow, allowing for a pivot-like spin while riding down the hill.');
-        $trick9->setCreatAt(new DateTimeImmutable());
+        $trick9->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick9);
 
 
