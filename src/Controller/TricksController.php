@@ -24,7 +24,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TricksController extends AbstractController
@@ -35,12 +34,13 @@ class TricksController extends AbstractController
                                 private CategoryRepository $categoryRepository, 
                                 private VideoRepository $videoRepository,
                                 private CommentRepository $commentRepository, 
-                                private EntityManagerInterface $em)
+                                private EntityManagerInterface $em,
+                                private SluggerInterface $slugger)
     {
     }
 
     #[Route('/create', methods: ['GET', 'POST'], name: 'app_create')]
-    public function create(Request $request, SluggerInterface $slugger): Response
+    public function create(Request $request): Response
     {
         $trick = new Trick();
         $video = new Video();
@@ -87,9 +87,8 @@ class TricksController extends AbstractController
                 $trick->addImage($image);
                 //set Trick
                 $title = $form->get('title')->getData();
-                $slug = $slugger->slug('fs flate');
                 $description = $form->get('description')->getData();
-                $trick->setTitle($slug);
+                $trick->setTitle($title);
                 $trick->setDescription($description);
                 $trick->setcreatedAt(new DateTimeImmutable());
                 $trick->setUser($this->getUser());
@@ -126,10 +125,12 @@ class TricksController extends AbstractController
 
 
     // Single Trick 
-    #[Route('/tricks/{title}', methods: ['GET', 'POST'], name: 'app_trick')]
-    public function trick($title, Request $request, PaginatorInterface $paginator): Response
+    #[Route('/tricks/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_trick')]
+    public function trick($id, 
+                          Request $request, 
+                          PaginatorInterface $paginator, ): Response
     {
-        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
+        $trick = $this->trickRepository->find($id);
         $user = $trick->getUser();
       
         // show comments,
@@ -156,7 +157,7 @@ class TricksController extends AbstractController
             $this->em->persist($comment);
             $this->em->flush($comment);
 
-            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$id ));
         }
 
 
@@ -172,10 +173,10 @@ class TricksController extends AbstractController
 
 
     // Update
-    #[Route('/tricks/update/{title}', methods: ['GET', 'POST'], name: 'app_update')]
-    public function update($title, Request $request): Response
+    #[Route('/tricks/update/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_update')]
+    public function update($id, Request $request): Response
     {
-        $trick = $this->trickRepository->findOneBy(['title'=> $title]);
+        $trick = $this->trickRepository->find($id);
         $form = $this->createForm(TrickUpdateFormType::class, $trick);
         $form->handleRequest($request);
 
@@ -190,7 +191,7 @@ class TricksController extends AbstractController
                 $trick->setCategory($form->get('category')->getData());
 
                 $this->em->flush();
-                return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+                return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$id ));
             }
             $this->addFlash('danger', 'Trick alredy exist. Please create another trick !');
         }
@@ -203,20 +204,21 @@ class TricksController extends AbstractController
     }
 
     // Delete 
-    #[Route('/tricks/delete/{title}', methods: ['GET', 'DELETE'], name: 'app_delete')]
-    public function delete($title): Response
+    #[Route('/tricks/delete/{slug}/{id}', methods: ['GET', 'DELETE'], name: 'app_delete')]
+    public function delete($id): Response
     {
-        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
+        $trick = $this->trickRepository->find($id);
         $user = $this->getUser();
         if ($user == $trick->getUser()) {
+            $fileSystem = new Filesystem();
+            $public_dir = $this->getParameter('kernel.project_dir') . '/public';
             // delete images in the file system
             $images = $trick->getImages();
             if ($images) {
                 foreach($images as $image ){
                     $fileImageName = $image->getImagePath();
-                    $fileSystem = new Filesystem();
-                    $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
-                    $fileImageName);
+                 
+                    $fileSystem->remove( $public_dir.$fileImageName);
                 }
             }
 
@@ -225,8 +227,10 @@ class TricksController extends AbstractController
             if ($videos) {
                 foreach ($videos as $video) {
                     $videoFileName = $video->getVideoPath();
-                    $fileSystem = new Filesystem();
-                    $fileSystem->remove( $this->getParameter('kernel.project_dir').'/public'.$videoFileName);
+                    if ($videoFileName != null){
+                        $fileSystem->remove( $public_dir.$videoFileName);
+                    }
+                  
                 }
             }
             

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileController extends AbstractController
 {
@@ -24,10 +25,10 @@ class FileController extends AbstractController
                                 private EntityManagerInterface $em)
     {
     }
-    #[Route('/upload_file/{title}', methods: ['GET', 'POST'], name: 'app_upload_file')]
-    public function index(Request $request, $title): Response
+    #[Route('/upload_file/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_upload_file')]
+    public function index(Request $request, $id, SluggerInterface $slugger): Response
     {
-        $trick = $this->trickRepository->findOneBy(['title'=>$title]);
+        $trick = $this->trickRepository->find($id);
         $form = $this->createForm(ImageFormType::class);
         $form->handleRequest($request);
 
@@ -63,7 +64,7 @@ class FileController extends AbstractController
 
                 $this->em->flush();
 
-                return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+                return $this->redirectToRoute('app_trick', array('slug' =>$slugger->slug($trick->getTitle()), 'id'=>$id ));
             }
         }
         return $this->render('file/index.html.twig', [

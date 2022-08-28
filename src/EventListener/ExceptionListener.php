@@ -10,7 +10,7 @@ class ExceptionListener
 {
     public function onKernelException(ExceptionEvent $event)
     {
-        // You get the exception object from the received event
+      /*   // You get the exception object from the received event
         $exception = $event->getThrowable();
         $message = sprintf(
             'Error : %s with code: %s',
@@ -32,6 +32,6 @@ class ExceptionListener
         }
 
         // sends the modified response object to the event
-        $event->setResponse($response);
+        $event->setResponse($response); */
     }
 }
