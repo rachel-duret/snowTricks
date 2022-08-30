@@ -18,8 +18,9 @@
 											<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
 												<i class="bi bi-x-circle-fill"></i>
 											</a>
-											<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
 										{% endif %}
+										<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
+
 									</div>
 								{% endfor %}
 
@@ -44,16 +45,17 @@
 											<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute z-index top-0 end-0" style="z-index: 9999;">
 												<i class="bi bi-x-circle-fill"></i>
 											</a>
-											{% if video.videoPath %}
-												<div class="ratio ratio-16x9 rounded">
-													<iframe src="{{video.videoPath}}" class="rounded"></iframe>
-												</div>
-											{% endif %}
-											{% if video.videoEmbedCode %}
-												{{video.videoEmbedCode | raw}}
-
-											{% endif %}
 										{% endif %}
+										{% if video.videoPath %}
+											<div class="ratio ratio-16x9 rounded">
+												<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+											</div>
+										{% endif %}
+										{% if video.videoEmbedCode %}
+											{{video.videoEmbedCode | raw}}
+
+										{% endif %}
+
 									</div>
 								{% endfor %}
 

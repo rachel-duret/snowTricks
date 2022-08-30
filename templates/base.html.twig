@@ -21,25 +21,26 @@
 
 		{% endblock %}
 	</head>
-	<body>
+	<body class="bg-dark bg-gradient bg-opacity-25 m-auto">
 
-		<div class="container">
-			{% include "_partials/_header.html.twig" %}
-			{% include "_partials/_flash.html.twig" %}
-			{% if app.user and app.user.isverified == false %}
 
-				<div class="alert alert-warning alert-dismissible" role="alert">
-					<button type="button" class="btn-close" data-bs-dismissible="alert" aria-label="Close"></button>
-					<div class="alert-message">
-						<strong>Your account have not activate yet</strong>
-						<a class="btn btn-link" href="{{path('app_reactivate_account')}}">
-							Reactivate Account
-						</a>
+		{% include "_partials/_header.html.twig" %}
+		{% include "_partials/_flash.html.twig" %}
+		{% if app.user and app.user.isverified == false %}
 
-					</div>
+			<div class="alert alert-warning alert-dismissible" role="alert">
+				<button type="button" class="btn-close" data-bs-dismissible="alert" aria-label="Close"></button>
+				<div class="alert-message">
+					<strong>Your account have not activate yet</strong>
+					<a class="btn btn-link" href="{{path('app_reactivate_account')}}">
+						Reactivate Account
+					</a>
+
 				</div>
-			{% endif %}
-			{% block body %}{% endblock %}
-		</div>
+			</div>
+		{% endif %}
+		{% block body %}{% endblock %}
+		{% include "_partials/_footer.html.twig" %}
+
 	</body>
 </html>

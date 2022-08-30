@@ -1,0 +1,24 @@
+<div class="row bg-secondary  p-5 m-2">
+	<div class="col-sm-6  d-none d-lg-block d-xl-none">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Coaches</h5>
+				<p class="card-text">With our coaches you can learn fast</p>
+				<a href="#" class="btn btn-primary">Find my coache</a>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex flex-row  justify-content-between d-block  d-xs-sm-block d-md-none">
+		<a class="nav-link" href="{{path('app_home')}}">
+			<i class="bi bi-house-fill" style="font-size:2rem"></i>
+		</a>
+		<a class="nav-link" href="">
+			<i class="bi bi-bookmark-fill" style="font-size:2rem"></i>
+		</a>
+		<a class="nav-link" href="{{path (app.user ? 'app_logout' : 'app_login')}}">
+			<i class="bi bi-box-arrow-in-right" style="font-size:2rem"></i>
+		</a>
+
+	</div>
+
+</div>
