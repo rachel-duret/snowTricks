@@ -12,17 +12,21 @@
 					<div class="card  mt-4 mb-4 p-0">
 						<div id="carouselImageControls" class="carousel slide" data-bs-ride="carousel">
 							<div class="carousel-inner">
-								{% for image in trick.images %}
-									<div class="carousel-item active">
-										{% if app.user and app.user is same as trick.user %}
-											<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
-												<i class="bi bi-x-circle-fill"></i>
-											</a>
-										{% endif %}
-										<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
+								{% if trick.images %}
+									{% for image in trick.images %}
+										<div class="carousel-item active">
+											{% if app.user and app.user is same as trick.user %}
+												<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+													<i class="bi bi-x-circle-fill"></i>
+												</a>
+											{% endif %}
+											<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
 
-									</div>
-								{% endfor %}
+										</div>
+									{% endfor %}
+								{% endif %}
+								<img src="https://ucarecdn.com/61b6d3e4-8c84-40b9-9f05-6af61d1bce37/-/sharp/3/-/format/jpeg/-/progressive/yes/-/quality/normal/-/scale_crop/622x544/center/" class="d-block w-100 rounded " alt="{{ trick.title }}">
+
 
 							</div>
 							<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageControls" data-bs-slide="prev">
@@ -46,15 +50,17 @@
 												<i class="bi bi-x-circle-fill"></i>
 											</a>
 										{% endif %}
-										{% if video.videoPath %}
+										{% if video %}
 											<div class="ratio ratio-16x9 rounded">
-												<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+												{% if video.videoPath %}
+													<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+												{% endif %}
+												{% if video.videoEmbedCode %}
+													{{video.videoEmbedCode | raw}}
+												{% endif %}
 											</div>
 										{% endif %}
-										{% if video.videoEmbedCode %}
-											{{video.videoEmbedCode | raw}}
 
-										{% endif %}
 
 									</div>
 								{% endfor %}

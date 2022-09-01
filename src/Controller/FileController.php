@@ -22,11 +22,13 @@ class FileController extends AbstractController
     public function __construct(private TrickRepository $trickRepository, 
                                 private ImageRepository $imageRepository, 
                                 private VideoRepository $videoRepository, 
-                                private EntityManagerInterface $em)
+                                private EntityManagerInterface $em,
+                                private SluggerInterface $slugger
+                                )
     {
     }
     #[Route('/upload_file/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_upload_file')]
-    public function index(Request $request, $id, SluggerInterface $slugger): Response
+    public function index(Request $request, $id): Response
     {
         $trick = $this->trickRepository->find($id);
         $form = $this->createForm(ImageFormType::class);
@@ -64,7 +66,7 @@ class FileController extends AbstractController
 
                 $this->em->flush();
 
-                return $this->redirectToRoute('app_trick', array('slug' =>$slugger->slug($trick->getTitle()), 'id'=>$id ));
+                return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$id ));
             }
         }
         return $this->render('file/index.html.twig', [
@@ -88,10 +90,10 @@ class FileController extends AbstractController
             $fileName);
             $this->em->remove($image);
             $this->em->flush();
-            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
         }
         $this->addFlash('danger', 'You do not have the right to delete this picture.');
-        return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+        return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
     }
 
     #[Route("/delete_video/{id}", methods: ['GET', 'DELETE'], name: "app_delete_video")]
@@ -110,9 +112,9 @@ class FileController extends AbstractController
             $fileName);
             $this->em->remove($video);
             $this->em->flush();
-            return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
         }
         $this->addFlash('danger', 'You do not have the right to delete this video');
-        return $this->redirectToRoute('app_trick', array('title' => $trick->getTitle()));
+        return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId() ));
     }
 }

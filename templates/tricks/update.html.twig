@@ -4,23 +4,65 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container d-flex flex-column  justify-content-evenly">
+	<div class="container ">
 		<div class="row ">
-			<div class="col-8 d-flex flex-column  justify-content-center ">
-				<h1>Update
-					{{trick.title}}</h1>
-				{% for image in trick.images %}
-					<div class="col-5 d-flex justify-content-md-between justify-content-center  mt-4 mb-4">
-						<img src="{{image.imagePath}}" class="img-fluid  w-100" alt="{{ trick.title }}">
+			<h1>Update
+				{{trick.title}}
+			</h1>
+			<div class="row d-flex flex-md-row justify-content-md-between justify-content-center  ">
 
+				{% for image in trick.images %}
+					<div class="col d-flex flex-row  justify-content-center m-auto ">
+						<div class="card m-3" style="width: 14rem;">
+							{% if app.user and app.user is same as trick.user %}
+								<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+									<i class="bi bi-x-circle-fill"></i>
+								</a>
+							{% endif %}
+							<img src="{{image.imagePath}}" class="img-fluid  w-100" style="height: 14rem;" alt="{{ trick.title }}">
+						</div>
 					</div>
 				{% endfor %}
 
-				{{form_start(form)}}
-				{{form_widget(form)}}
-				<button type="submit" class="btn btn-primary">Update Trick</button>
-				{{ form_end(form) }}
+
 			</div>
+			<div class="row d-flex flex-md-row justify-content-md-between justify-content-center  ">
+				{% if trick.videos %}
+
+					{% for video in trick.videos %}
+						<div class="col d-flex flex-row  justify-content-center m-auto ">
+							<div class="card m-3" style="width: 16rem;">
+								{% if app.user and app.user is same as trick.user %}
+									<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+										<i class="bi bi-x-circle-fill"></i>
+									</a>
+								{% endif %}
+								<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+							</div>
+						</div>
+						{% if video.videoEmbedCode %}
+							<div class="col d-flex flex-row  justify-content-center m-auto ">
+								<div class="card m-3" style="height: 14rem;">
+									{% if app.user and app.user is same as trick.user %}
+										<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+											<i class="bi bi-x-circle-fill"></i>
+										</a>
+									{% endif %}
+									{{video.videoEmbedCode | raw}}
+								</div>
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				{% for video in trick.videos %}
+					<div class="col d-flex flex-row  justify-content-center m-auto"></div>
+				{% endfor %}
+
+			</div>
+			{{form_start(form)}}
+			{{form_widget(form)}}
+			<button type="submit" class="btn btn-primary my-5">Update Trick</button>
+			{{ form_end(form) }}
 
 		</div>
 	</div>
