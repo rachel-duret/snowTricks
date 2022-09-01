@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Entity\Video;
+use App\Form\FileFormType;
 use App\Form\ImageFormType;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
@@ -31,7 +32,7 @@ class FileController extends AbstractController
     public function index(Request $request, $id): Response
     {
         $trick = $this->trickRepository->find($id);
-        $form = $this->createForm(ImageFormType::class);
+        $form = $this->createForm(FileFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -57,13 +58,26 @@ class FileController extends AbstractController
 
                 //persist video
                 $videoPath = $form->get('video')->getData();
+                $videoEmbedCode = $form->get('videoEmbed')->getData();
+                $video = new Video();
                 if ($videoPath) {
-                    $video = new Video();
-                    $video->setVideoPath($videoPath);
-                    $video->setTrick($trick);
-                    $this->em->persist($video);
+                    $newVideoFileName = uniqid() . '.' . $videoPath->guessExtension();
+                    try {
+                        $videoPath->move(
+                            $this->getParameter('kernel.project_dir') . '/public/uploads/',
+                            $newVideoFileName
+                        );
+                    } catch (FileException $e) {
+                        return new Response($e->getMessage());
+                    }
+                    $video->setVideoPath('/uploads/' . $newVideoFileName);
                 }
-
+                if ($videoEmbedCode){
+                    $video->setVideoEmbedCode($videoEmbedCode);
+                }
+                $video->setTrick($trick);
+                $this->em->persist($video);
+                
                 $this->em->flush();
 
                 return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$id ));
@@ -96,6 +110,80 @@ class FileController extends AbstractController
         return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
     }
 
+    //update image
+    #[Route("/update_image/{id}",  name: "app_update_image")]
+    public function updateImageFile($id, Request $request):Response
+    {
+        $image = $this->imageRepository->find($id);
+        $user = $this->getUser();
+        $trick = $image->getTrick();
+        $form = $this->createForm(ImageFormType::class);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newImagePath = $form->get('image')->getData();
+            if ($user == $trick->getUser()) {
+                $fileName = $image->getImagePath();
+                if  ($fileName) {
+                    $fileSystem = new Filesystem();
+                    $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+                    $fileName);
+                }
+
+                // New image path
+                if ($newImagePath) {
+                    $newFileName = uniqid() . '.' . $newImagePath->guessExtension();
+                    try {
+                        $newImagePath->move(
+                            $this->getParameter('kernel.project_dir') . '/public/uploads/',
+                            $newFileName
+                        );
+                    } catch (FileException $e) {
+                        return new Response($e->getMessage());
+                    }
+                    $image->setImagePath('/uploads/' . $newFileName);
+                }
+               
+                $this->em->persist($image);
+                $this->em->flush();
+                return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
+            }
+            $this->addFlash('danger', 'You do not have the right to update this picture.');
+
+            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId())); 
+        }
+      
+
+
+        return $this->render('file/update_image.html.twig',[
+            'imageForm'=>$form->createView(),
+        ]);
+    }
+
+    //update video
+    #[Route("/update_video/{id}",  name: "app_update_video")]
+    public function updateVideoFile($id)
+    {
+        $video = $this->videoRepository->find($id);
+        $user = $this->getUser();
+        $trick = $video->getTrick();
+      
+/* 
+        if ($user == $trick->getUser()) {
+
+            $fileName = $video->getVideoPath();
+            $fileSystem = new Filesystem();
+            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+            $fileName);
+            $this->em->remove($video);
+            $this->em->flush();
+            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
+        }
+        $this->addFlash('danger', 'You do not have the right to  this video');
+        return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId() )); */
+    }
+
+    // Delete video
     #[Route("/delete_video/{id}", methods: ['GET', 'DELETE'], name: "app_delete_video")]
     public function deleteVideoFile($id): Response
     {
@@ -105,11 +193,21 @@ class FileController extends AbstractController
       
 
         if ($user == $trick->getUser()) {
-
             $fileName = $video->getVideoPath();
-            $fileSystem = new Filesystem();
-            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
-            $fileName);
+            $videoEmbedCode = $video->getVideoEmbedCode();
+            if ($fileName) {
+                $fileSystem = new Filesystem();
+                $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+                $fileName);
+                if ($video->getVideoEmbedCode()){
+                    $video->setVideoPath(null);
+                }
+            }
+            if ($videoEmbedCode){
+                if($video->getVideoPath()){
+                    $video->setVideoEmbedCode(null);
+                } 
+            }
             $this->em->remove($video);
             $this->em->flush();
             return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));

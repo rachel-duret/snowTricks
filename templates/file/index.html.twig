@@ -8,6 +8,7 @@
 		<div class="col-6 col-sm-6 my-5">
 			<h1 class="text-secondary text-center">Upload files</h1>
 			{{form_start(fileForm)}}
+			{{form_row(fileForm.videoEmbed)}}
 			{{form_row(fileForm.video)}}
 			{{form_row(fileForm.image)}}
 			<button type="submit" class="btn btn-primary opacity-75">Submit</button>

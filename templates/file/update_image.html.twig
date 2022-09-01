@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FileController!
+{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center">
+    <div class="col-6 col-sm-6 my-5">
+        <h1 class="text-secondary text-center">Upload files</h1>
+        {{form_start(imageForm)}}
+        {{form_row(imageForm.image)}}
+        <button type="submit" class="btn btn-primary opacity-75">Submit</button>
+        {{form_end(imageForm)}}
+    </div>
+</div>
+{% endblock %}

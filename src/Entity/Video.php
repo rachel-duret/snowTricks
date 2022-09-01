@@ -35,7 +35,7 @@ class Video
         return $this->videoPath;
     }
 
-    public function setVideoPath(string $videoPath): self
+    public function setVideoPath(?string $videoPath): self
     {
         $this->videoPath = $videoPath;
 

@@ -5,127 +5,145 @@
 
 {% block body %}
 	<div class="container">
-		<div class="row ">
-			<div class="col-12 col-sm-6">
-				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center">
+		<div class="row  ">
+			<div class="col-md-10 col-md-offset-1 mb-4">
+				{% if trick %}
+					<div class="  d-flex flex-row justify-content-between">
+						<h2 class="text-uppercase mt-5">{{trick.title}}</h2>
+						<div class=" mt-5">
+							{% if app.user and app.user==trick.user  %}
+								<a class="btn btn-success opacity-75" href="{{ path('app_upload_file', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">
+									<i class="bi bi-card-image"></i>
+								</a>
+								<a class="btn btn-primary opacity-75" href="{{ path('app_update', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">
+									<i class="bi bi-pencil-fill"></i>
+								</a>
+								<a class="btn btn-danger opacity-75" href="{{ path('app_delete', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">
+									<i class="bi bi-trash bi-danger"></i>
+								</a>
+							{% endif %}
 
-					<div class="card  mt-4 mb-4 p-0">
-						<div id="carouselImageControls" class="carousel slide" data-bs-ride="carousel">
-							<div class="carousel-inner">
-								{% if trick.images %}
-									{% for image in trick.images %}
-										<div class="carousel-item active">
-											{% if app.user and app.user is same as trick.user %}
-												<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
-													<i class="bi bi-x-circle-fill"></i>
-												</a>
+						</div>
+					</div>
+
+					<div class="cart mt-5">
+						<img src="https://www.salomon.com/sites/default/files/homepage/2022-07/SPORTPAGE_SNOW_Desktop_1.jpg?fit=cover&orientation=1&optimize=low&bg-color=f5f5f5&format=pjpg&auto=webp&width=826&dpr=1.25" class="display-top img-fluid" alt="main image">
+						<div class="card-body">
+							<hr>
+							{# Show images with carousel #}
+							<div class="row d-lg-flex load-media">
+								<div class="col-lg-6 col-md-12">
+									<div id="carouselImageControls" class="carousel slide" data-bs-ride="carousel">
+										<div class="carousel-inner ">
+											{% if trick.images %}
+												{% for image in trick.images %}
+													<div class="carousel-item active" style="height:200px;">
+														{% if app.user and app.user is same as trick.user %}
+															<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
+																<i class="bi bi-x-circle-fill"></i>
+															</a>
+														{% endif %}
+														<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
+
+													</div>
+												{% endfor %}
 											{% endif %}
-											<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
+											{# default image #}
+											<img src="https://ucarecdn.com/61b6d3e4-8c84-40b9-9f05-6af61d1bce37/-/sharp/3/-/format/jpeg/-/progressive/yes/-/quality/normal/-/scale_crop/622x544/center/" class="d-block w-100 rounded " alt="{{ trick.title }}">
+
 
 										</div>
-									{% endfor %}
-								{% endif %}
-								<img src="https://ucarecdn.com/61b6d3e4-8c84-40b9-9f05-6af61d1bce37/-/sharp/3/-/format/jpeg/-/progressive/yes/-/quality/normal/-/scale_crop/622x544/center/" class="d-block w-100 rounded " alt="{{ trick.title }}">
-
-
-							</div>
-							<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageControls" data-bs-slide="prev">
-								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-								<span class="visually-hidden">Previous</span>
-							</button>
-							<button class="carousel-control-next" type="button" data-bs-target="#carouselImageControls" data-bs-slide="next">
-								<span class="carousel-control-next-icon" aria-hidden="true"></span>
-								<span class="visually-hidden">Next</span>
-							</button>
-						</div>
-
-					</div>
-					<div class="card mt-4 mb-4 p-0">
-						<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
-							<div class="carousel-inner">
-								{% for video in trick.videos %}
-									<div class="carousel-item active">
-										{% if app.user and app.user is same as trick.user %}
-											<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute z-index top-0 end-0" style="z-index: 9999;">
-												<i class="bi bi-x-circle-fill"></i>
-											</a>
-										{% endif %}
-										{% if video %}
-											<div class="ratio ratio-16x9 rounded">
-												{% if video.videoPath %}
-													<iframe src="{{video.videoPath}}" class="rounded"></iframe>
-												{% endif %}
-												{% if video.videoEmbedCode %}
-													{{video.videoEmbedCode | raw}}
-												{% endif %}
-											</div>
-										{% endif %}
-
-
+										<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageControls" data-bs-slide="prev">
+											<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+											<span class="visually-hidden">Previous</span>
+										</button>
+										<button class="carousel-control-next" type="button" data-bs-target="#carouselImageControls" data-bs-slide="next">
+											<span class="carousel-control-next-icon" aria-hidden="true"></span>
+											<span class="visually-hidden">Next</span>
+										</button>
 									</div>
-								{% endfor %}
 
+								</div>
+								{# show videos with carousel #}
+								<div class="col-lg-6 col-md-12">
+									<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
+										<div class="carousel-inner">
+											{% for video in trick.videos %}
+												<div class="carousel-item active">
+													{% if app.user and app.user is same as trick.user %}
+														<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute z-index top-0 end-0" style="z-index: 9999;">
+															<i class="bi bi-x-circle-fill"></i>
+														</a>
+													{% endif %}
+													{% if video %}
+														<div class="ratio ratio-16x9 rounded">
+															{% if video.videoPath %}
+																<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+															{% endif %}
+															{% if video.videoEmbedCode %}
+																{{video.videoEmbedCode | raw}}
+															{% endif %}
+														</div>
+													{% endif %}
+
+
+												</div>
+											{% endfor %}
+
+										</div>
+										<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">
+											<span class="carousel-control-prev-icon btn-dark" aria-hidden="true"></span>
+											<span class="visually-hidden">Previous</span>
+										</button>
+										<button class="carousel-control-next" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="next">
+											<span class="carousel-control-next-icon btn-dark" aria-hidden="true"></span>
+											<span class="visually-hidden">Next</span>
+										</button>
+									</div>
+								</div>
 							</div>
-							<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">
-								<span class="carousel-control-prev-icon btn-dark" aria-hidden="true"></span>
-								<span class="visually-hidden">Previous</span>
-							</button>
-							<button class="carousel-control-next" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="next">
-								<span class="carousel-control-next-icon btn-dark" aria-hidden="true"></span>
-								<span class="visually-hidden">Next</span>
-							</button>
+							{# imformation of trick  #}
+							<ul class="list-inline my-5">
+								<li class="list-inline-item">
+									Category:<strong class="text-capitalize ">{{trick.category.name}}</strong>
+
+								</li>
+								<li class="list-inline-item">
+									By:
+									<a href="">
+										<strong class="text-capitalize">
+											{{trick.user.username}}
+										</strong>
+									</a>
+								</li>
+								<li class="list-inline-item">
+									Created at:<strong>{{trick.createdAt|date("D-M-Y H:i:s ")}}</strong>
+								</li>
+								<li class="list-inline-item">
+									Updated at:<strong>{{trick.updatedAt|date("D-M-Y H:i:s ")}}</strong>
+								</li>
+							</ul>
+							<p class="text-capitalize">{{trick.description}}
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora deleniti obcaecati, voluptatum, ratione eius sequi eligendi illo atque neque in dicta numquam quisquam ea corrupti, labore cumque autem. Quisquam, minus.</p>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="col-12 col-sm-6">
-				<div class="mx-auto row d-flex flex-md-row justify-content-md-between justify-content-center text-secondary">
-					<h2 class="text-uppercase mt-5">{{trick.title}}</h2>
-					<p class="">
-						Category:<strong class="text-capitalize ">{{trick.category.name}}</strong>
 
-					</p>
-					<p class="text-capitalize">{{trick.description}}</p>
-					<p>
-						Created by:<strong class="text-capitalize">
-							{{trick.user.username}}</strong>
-					</p>
-					<p>
-						Created at:<strong>{{trick.createdAt|date("D-M-Y H:i:s ")}}</strong>
-					</p>
-				</div>
-				{% if app.user and app.user==trick.user  %}
-					<a class="btn btn-primary opacity-75" href="{{ path('app_upload_file', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">Upload file</a>
-					<a class="btn btn-primary opacity-75" href="{{ path('app_update', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">Update</a>
-					<a class="btn btn-danger opacity-75" href="{{ path('app_delete', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">Delete</a>
+
 				{% endif %}
 
 			</div>
 		</div>
 		<hr>
+		{# commebt block #}
 		<div class="row">
 			<h2>Comments</h2>
 			<div class="col text-center">
 				{% for comment in comments %}
 					<div class="row">
-						<div class="col">
-							<p class="text-capitalize">{{comment.comment}}</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-3">
-							<p>
-								Commented at:<strong class="text-capitalize">{{comment.createAt|date("D-M-Y H:i:s ")}}
-								</strong>
-
-							</p>
-						</div>
-						<div class="col-3">
-							-By:<strong class="text-capitalize">{{comment.user.username}}</strong>
-
-							<a href="{{path('app_profile', {id:comment.user.id, username:comment.user.username})}}" class="link link-secondry ml-5">
+						<div class="col col-lg-1 col-md-2 col-sm-4 col-xs-6 text-center">
+							<a href="{{path('app_profile', {id:comment.user.id, username:comment.user.username})}}" class="btn  ml-5">
 								{% if comment.user.image %}
-									<img src="{{comment.user.image}}" alt="profile image" style="width:30px" class="rounded-circle">
+									<img src="{{comment.user.image}}" alt="profile image" style="width:50px;height:50px;" class="rounded">
 								{% else %}
 									<i class="bi bi-person-circle"></i>
 
@@ -133,7 +151,19 @@
 							</a>
 
 						</div>
+						<div class="col">
+							<p class="text-capitalize">{{comment.comment}}</p>
+							<ul class="list-inline">
+								<li class="list-inline-item">-By:<strong class="text-capitalize">{{comment.user.username}}</strong>
+								</li>
+								<li class="list-inline-item">
+									Commented at:<strong class="text-capitalize">{{comment.createAt|date("D-M-Y H:i:s ")}}
+									</strong>
+								</li>
+							</ul>
+						</div>
 					</div>
+
 					<hr>
 
 				{% endfor %}
