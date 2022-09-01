@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Entity\Video;
 use App\Form\FileFormType;
 use App\Form\ImageFormType;
+use App\Form\VideoFormType;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
@@ -88,6 +89,58 @@ class FileController extends AbstractController
         ]);
     }
 
+     //update image
+     #[Route("/update_image/{id}",  name: "app_update_image")]
+     public function updateImageFile($id, Request $request):Response
+     {
+         $image = $this->imageRepository->find($id);
+         $user = $this->getUser();
+         $trick = $image->getTrick();
+         $form = $this->createForm(ImageFormType::class);
+         $form->handleRequest($request);
+         
+         if ($form->isSubmitted() && $form->isValid()) {
+             $newImagePath = $form->get('image')->getData();
+             if ($user == $trick->getUser()) {
+                 $fileName = $image->getImagePath();
+                 if  ($fileName) {
+                     $fileSystem = new Filesystem();
+                     $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
+                     $fileName);
+                 }
+ 
+                 // New image path
+                 if ($newImagePath) {
+                     $newFileName = uniqid() . '.' . $newImagePath->guessExtension();
+                     try {
+                         $newImagePath->move(
+                             $this->getParameter('kernel.project_dir') . '/public/uploads/',
+                             $newFileName
+                         );
+                     } catch (FileException $e) {
+                         return new Response($e->getMessage());
+                     }
+                     $image->setImagePath('/uploads/' . $newFileName);
+                 }
+                
+                 $this->em->persist($image);
+                 $this->em->flush();
+                 return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
+             }
+             $this->addFlash('danger', 'You do not have the right to update this picture.');
+ 
+             return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId())); 
+         }
+       
+ 
+ 
+         return $this->render('file/update_image.html.twig',[
+             'imageForm'=>$form->createView(),
+         ]);
+     }
+ 
+
+    // Delet one image 
     #[Route("/delete_image/{id}", methods: ['GET', 'DELETE'], name: "app_delete_image")]
     public function deleteImageFile($id): Response
     {
@@ -110,20 +163,22 @@ class FileController extends AbstractController
         return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
     }
 
-    //update image
-    #[Route("/update_image/{id}",  name: "app_update_image")]
-    public function updateImageFile($id, Request $request):Response
+   
+    //update video
+    #[Route("/update_video/{id}",  name: "app_update_video")]
+    public function updateVideoFile($id, Request $request): Response
     {
-        $image = $this->imageRepository->find($id);
+        $video = $this->videoRepository->find($id);
         $user = $this->getUser();
-        $trick = $image->getTrick();
-        $form = $this->createForm(ImageFormType::class);
+        $trick = $video->getTrick();
+
+        $form = $this->createForm(VideoFormType::class);
         $form->handleRequest($request);
-        
         if ($form->isSubmitted() && $form->isValid()) {
-            $newImagePath = $form->get('image')->getData();
+            $newVideoPath = $form->get('video')->getData();
+            $newVideoEmbedCode = $form->get('videoEmbed')->getData();
             if ($user == $trick->getUser()) {
-                $fileName = $image->getImagePath();
+                $fileName = $video->getVideoPath();
                 if  ($fileName) {
                     $fileSystem = new Filesystem();
                     $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
@@ -131,56 +186,39 @@ class FileController extends AbstractController
                 }
 
                 // New image path
-                if ($newImagePath) {
-                    $newFileName = uniqid() . '.' . $newImagePath->guessExtension();
+                if ($newVideoPath) {
+                    $newFileName = uniqid() . '.' . $newVideoPath->guessExtension();
                     try {
-                        $newImagePath->move(
+                        $newVideoPath->move(
                             $this->getParameter('kernel.project_dir') . '/public/uploads/',
                             $newFileName
                         );
                     } catch (FileException $e) {
                         return new Response($e->getMessage());
                     }
-                    $image->setImagePath('/uploads/' . $newFileName);
+                    $video->setVideoPath('/uploads/' . $newFileName);          
+                }
+                if ($newVideoEmbedCode) {
+                      
+                    $video->setVideoEmbedCode($newVideoEmbedCode);
                 }
                
-                $this->em->persist($image);
+                $this->em->persist($video);
                 $this->em->flush();
                 return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
             }
-            $this->addFlash('danger', 'You do not have the right to update this picture.');
+            $this->addFlash('danger', 'You do not have the right to update this video.');
 
             return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId())); 
         }
       
 
 
-        return $this->render('file/update_image.html.twig',[
-            'imageForm'=>$form->createView(),
+        return $this->render('file/update_video.html.twig',[
+            'videoForm'=>$form->createView(),
         ]);
-    }
-
-    //update video
-    #[Route("/update_video/{id}",  name: "app_update_video")]
-    public function updateVideoFile($id)
-    {
-        $video = $this->videoRepository->find($id);
-        $user = $this->getUser();
-        $trick = $video->getTrick();
       
-/* 
-        if ($user == $trick->getUser()) {
 
-            $fileName = $video->getVideoPath();
-            $fileSystem = new Filesystem();
-            $fileSystem->remove( $this->getParameter('kernel.project_dir') . '/public'.
-            $fileName);
-            $this->em->remove($video);
-            $this->em->flush();
-            return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId()));
-        }
-        $this->addFlash('danger', 'You do not have the right to  this video');
-        return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$trick->getId() )); */
     }
 
     // Delete video

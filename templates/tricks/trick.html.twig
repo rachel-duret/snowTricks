@@ -38,11 +38,6 @@
 											{% if trick.images %}
 												{% for image in trick.images %}
 													<div class="carousel-item active" style="height:200px;">
-														{% if app.user and app.user is same as trick.user %}
-															<a href="{{path('app_delete_image', {id: image.id})}}" class="btn btn-danger position-absolute  top-0 end-0" style="z-index: 9999;">
-																<i class="bi bi-x-circle-fill"></i>
-															</a>
-														{% endif %}
 														<img src="{{image.imagePath}}" class="d-block w-100 rounded " alt="{{ trick.title }}">
 
 													</div>
@@ -70,11 +65,6 @@
 										<div class="carousel-inner">
 											{% for video in trick.videos %}
 												<div class="carousel-item active">
-													{% if app.user and app.user is same as trick.user %}
-														<a href="{{path('app_delete_video', {id: video.id})}}" class="btn btn-danger position-absolute z-index top-0 end-0" style="z-index: 9999;">
-															<i class="bi bi-x-circle-fill"></i>
-														</a>
-													{% endif %}
 													{% if video %}
 														<div class="ratio ratio-16x9 rounded">
 															{% if video.videoPath %}
