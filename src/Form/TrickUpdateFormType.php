@@ -19,16 +19,16 @@ class TrickUpdateFormType extends AbstractType
         $builder
         ->add('title',TextType::class, [
             'attr'=> array(
-                'class'=>'form-control text-capitalize m-2',
+                'class'=>'form-control text-capitalize my-2',
                
             ),
-            'label'=>false
+            
         ])
         ->add('category', EntityType::class, [
            'class'=>Category::class,
            'choice_label'=>'name',
            'attr'=>[
-            'class'=>'form-control text-capitalize m-2'
+            'class'=>'form-control text-capitalize my-2'
            ]
            
         ])
@@ -36,10 +36,10 @@ class TrickUpdateFormType extends AbstractType
        
         ->add('description', TextareaType::class, [
             'attr'=> array(
-                'class'=>'form-control text-capitalize m-2',
+                'class'=>'form-control text-capitalize my-2',
                
             ),
-            'label'=>false
+            
         ])
         ;
     }

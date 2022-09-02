@@ -62,7 +62,7 @@
 								{# show videos with carousel #}
 								<div class="col-lg-6 col-md-12">
 									<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
-										<div class="carousel-inner">
+										<div class="carousel-inner m-auto">
 											{% for video in trick.videos %}
 												<div class="carousel-item active">
 													{% if video %}
@@ -113,8 +113,7 @@
 									Updated at:<strong>{{trick.updatedAt|date("D-M-Y H:i:s ")}}</strong>
 								</li>
 							</ul>
-							<p class="text-capitalize">{{trick.description}}
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora deleniti obcaecati, voluptatum, ratione eius sequi eligendi illo atque neque in dicta numquam quisquam ea corrupti, labore cumque autem. Quisquam, minus.</p>
+							<p class="text-capitalize">{{trick.description}}</p>
 						</div>
 					</div>
 

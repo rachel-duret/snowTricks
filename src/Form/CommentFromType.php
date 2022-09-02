@@ -17,7 +17,8 @@ class CommentFromType extends AbstractType
                 'attr'=>[
                     'class'=>'form-control mb-3',
                     'placeholder'=>'Write your comment here...'
-                ]
+                ],
+                'label'=>false
                
             ])
         ;

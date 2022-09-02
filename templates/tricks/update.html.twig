@@ -9,7 +9,8 @@
 			<div class="col-md-10 col-md-offset-1 mb-4">
 				{% if trick %}
 					<div class="  d-flex flex-row justify-content-between">
-						<h2 class="text-uppercase mt-5">Update{{trick.title}}</h2>
+						<h2 class="text-uppercase mt-5">Update
+							{{trick.title}}</h2>
 						<div class=" mt-5">
 							{% if app.user and app.user==trick.user  %}
 								<a class="btn btn-success opacity-75" href="{{ path('app_upload_file', { slug: trick.title|slug('_'), id: trick.id }) }}" role="button">
@@ -117,7 +118,7 @@
 						<div class="col">
 							{{form_start(form)}}
 							{{form_widget(form)}}
-							<button type="submit" class="btn btn-primary my-5">Update Trick</button>
+							<button type="submit" class="btn btn-primary  my-3">Update Trick</button>
 							{{ form_end(form) }}
 						</div>
 
