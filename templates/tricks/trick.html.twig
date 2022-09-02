@@ -31,7 +31,7 @@
 						<div class="card-body">
 							<hr>
 							{# Show images with carousel #}
-							<div class="row d-lg-flex load-media">
+							<div class="row d-lg-flex ">
 								<div class="col-lg-6 col-md-12">
 									<div id="carouselImageControls" class="carousel slide" data-bs-ride="carousel">
 										<div class="carousel-inner ">
@@ -60,36 +60,45 @@
 
 								</div>
 								{# show videos with carousel #}
-								<div class="col-lg-6 col-md-12">
-									<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
-										<div class="carousel-inner m-auto">
-											{% for video in trick.videos %}
-												<div class="carousel-item active">
-													{% if video %}
-														<div class="ratio ratio-16x9 rounded">
-															{% if video.videoPath %}
-																<iframe src="{{video.videoPath}}" class="rounded"></iframe>
-															{% endif %}
-															{% if video.videoEmbedCode %}
-																{{video.videoEmbedCode | raw}}
-															{% endif %}
-														</div>
-													{% endif %}
-
-
-												</div>
-											{% endfor %}
-
-										</div>
-										<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">
-											<span class="carousel-control-prev-icon btn-dark" aria-hidden="true"></span>
-											<span class="visually-hidden">Previous</span>
-										</button>
-										<button class="carousel-control-next" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="next">
-											<span class="carousel-control-next-icon btn-dark" aria-hidden="true"></span>
-											<span class="visually-hidden">Next</span>
+								<div class="col-lg-6 col-md-12 mx-auto ">
+									<div class="d-flex justify-content-evenly  d-block d-xs-sm-block d-md-none my-3">
+										<button class="btn btn-light " type="button" data-bs-toggle="collapse" data-bs-target="#mediaCollapse" aria-controls="mediaCollapse" aria-expanded="false" aria-label="Toggle media">
+											Show Media
 										</button>
 									</div>
+
+									<div class="collapse media-collapse show" id="mediaCollapse">
+										<div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel">
+											<div class="carousel-inner m-auto" id="MediaCollapse">
+												{% for video in trick.videos %}
+													<div class="carousel-item active">
+														{% if video %}
+															<div class="ratio ratio-16x9 rounded">
+																{% if video.videoPath %}
+																	<iframe src="{{video.videoPath}}" class="rounded"></iframe>
+																{% endif %}
+																{% if video.videoEmbedCode %}
+																	{{video.videoEmbedCode | raw}}
+																{% endif %}
+															</div>
+														{% endif %}
+
+
+													</div>
+												{% endfor %}
+
+											</div>
+											<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">
+												<span class="carousel-control-prev-icon btn-dark" aria-hidden="true"></span>
+												<span class="visually-hidden">Previous</span>
+											</button>
+											<button class="carousel-control-next" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="next">
+												<span class="carousel-control-next-icon btn-dark" aria-hidden="true"></span>
+												<span class="visually-hidden">Next</span>
+											</button>
+										</div>
+									</div>
+
 								</div>
 							</div>
 							{# imformation of trick  #}
