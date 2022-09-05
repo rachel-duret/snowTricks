@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickFormType extends AbstractType
 {
@@ -21,14 +22,26 @@ class TrickFormType extends AbstractType
                 'class'=>'form-control mb-3',
                 'placeholder'=>'Trick title..'
             ),
-            'label'=>false
+            'label'=>false,
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a title',
+                ]),
+               
+            ],
         ])
         ->add('name', TextType::class, [
             'attr'=> array(
                 'class'=>'form-control mb-3',
                 'placeholder'=>'Category'
             ),
-            'label'=>false
+            'label'=>false,
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a category',
+                ]),
+               
+            ],
         ])
 
        
@@ -37,7 +50,13 @@ class TrickFormType extends AbstractType
                 'class'=>'form-control mb-3',
                 'placeholder'=>''
             ),
-            'label'=>false
+            'label'=>false,
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a description of trick',
+                ]),
+               
+            ],
         ])
         ->add('videoEmbed', TextType::class, [
             'attr'=> array(

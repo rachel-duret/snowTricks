@@ -25,6 +25,17 @@ class RegistrationFormType extends AbstractType
                     'autocomplete'=>'username',
                     'placeholder'=>'Username'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your name',
+                    ]),
+                    new Length([
+                        'min' => 4,
+                        'minMessage' => 'Your username should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 100,
+                    ]),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'attr'=>[

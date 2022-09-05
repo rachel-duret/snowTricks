@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickUpdateFormType extends AbstractType
 {
@@ -22,6 +23,12 @@ class TrickUpdateFormType extends AbstractType
                 'class'=>'form-control text-capitalize my-2',
                
             ),
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a title',
+                ]),
+               
+            ],
             
         ])
         ->add('category', EntityType::class, [
@@ -29,7 +36,13 @@ class TrickUpdateFormType extends AbstractType
            'choice_label'=>'name',
            'attr'=>[
             'class'=>'form-control text-capitalize my-2'
-           ]
+           ],
+           'constraints' => [
+            new NotBlank([
+                'message' => 'Please enter a category',
+            ]),
+           
+        ],
            
         ])
 
@@ -39,6 +52,12 @@ class TrickUpdateFormType extends AbstractType
                 'class'=>'form-control text-capitalize my-2',
                
             ),
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a description of trick',
+                ]),
+               
+            ],
             
         ])
         ;

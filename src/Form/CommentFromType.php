@@ -2,11 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CommentFromType extends AbstractType
 {
@@ -18,7 +18,12 @@ class CommentFromType extends AbstractType
                     'class'=>'form-control mb-3',
                     'placeholder'=>'Write your comment here...'
                 ],
-                'label'=>false
+                'label'=>false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please Write something',
+                    ]),
+                ],
                
             ])
         ;
