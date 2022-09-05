@@ -43,6 +43,7 @@ security:
     - { path: ^/delete_video, roles: ROLE_USER }
     - { path: ^/profile, roles: ROLE_USER, methods:[POST] }
     - { path: ^/profile/update, roles: ROLE_USER }
+    - { path: ^/trick/main_picture, roles: ROLE_USER }
     
 
 
