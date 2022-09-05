@@ -33,8 +33,18 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/create, roles: ROLE_USER }
-    - { path: ^/profile, roles: ROLE_USER }
     - { path: ^/tricks/update, roles: ROLE_USER }
+    - { path: ^/tricks/delete, roles: ROLE_USER }
+    - { path: ^/tricks, roles: ROLE_USER, methods:[POST] }
+    - { path: ^/upload_file, roles: ROLE_USER }
+    - { path: ^/update_image, roles: ROLE_USER }
+    - { path: ^/update_video, roles: ROLE_USER }
+    - { path: ^/delete_image, roles: ROLE_USER }
+    - { path: ^/delete_video, roles: ROLE_USER }
+    - { path: ^/profile, roles: ROLE_USER, methods:[POST] }
+    - { path: ^/profile/update, roles: ROLE_USER }
+    
+
 
 when@test:
   security:
