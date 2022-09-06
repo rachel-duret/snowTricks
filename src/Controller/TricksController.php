@@ -87,6 +87,7 @@ class TricksController extends AbstractController
                 $trick->addImage($image);
                 //set Trick
                 $title = $form->get('title')->getData();
+                $trick->setMainPicture('/uploads/' . $newFileName);
                 $description = $form->get('description')->getData();
                 $trick->setTitle($title);
                 $trick->setDescription($description);

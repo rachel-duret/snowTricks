@@ -27,9 +27,19 @@
 					</div>
 
 					<div class="cart mt-5">
-						<img src="{{trick.mainPicture}}" class="display-top img-fluid" alt="main image">
+						<div class="row  d-flex  justify-content-center ">
+							{% if trick.mainPicture %}
+								<img src="{{trick.mainPicture}}" class="img-fluid" alt="main image">
+							{% else %}
+								{% for image in trick.images[:1] %}
+									<img class="card-img-top " class="display-top img-fluid" src="{{image.imagePath}}" alt="{{trick.title}}">
+								{% endfor %}
+							{% endif %}
 
-						<div class="card-body">
+						</div>
+
+
+						<div class=" card-body">
 							<hr>
 							{# Show images with carousel #}
 							<div class="row d-lg-flex ">
