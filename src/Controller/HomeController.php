@@ -27,12 +27,11 @@ class HomeController extends AbstractController
             10
         );
 
-        
 
-        return $this->render('home/index.html.twig', [
+
+        return $this->render('home/home.html.twig', [
             'tricks' => $tricks,
 
         ]);
     }
-
 }

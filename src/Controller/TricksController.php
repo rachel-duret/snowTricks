@@ -38,7 +38,7 @@ class TricksController extends AbstractController
                                 private SluggerInterface $slugger)
     {
     }
-
+  /* ***********************Create one trick page*************************** */
     #[Route('/create', methods: ['GET', 'POST'], name: 'app_create')]
     public function create(Request $request): Response
     {
@@ -95,7 +95,6 @@ class TricksController extends AbstractController
                 $trick->setUser($this->getUser());
 
                 //set Category          
-
                 $name = $form->get('name')->getData();
                 $category = $this->categoryRepository->findOneBy(['name' => $name]);
                 if ($category) {
@@ -106,9 +105,6 @@ class TricksController extends AbstractController
                     $trick->setCategory($newCategory);
                     $this->em->persist($newCategory);
                 }
-
-
-
                 $this->em->persist($trick);
                 $this->em->persist($image);
                 $this->em->persist($video);
@@ -116,7 +112,6 @@ class TricksController extends AbstractController
 
                 return $this->redirectToRoute('app_home');
             }
-
             $this->addFlash('danger', 'Trick alredy exist. Please create another trick !');
         }
         return $this->render('tricks/create.html.twig', [
@@ -125,7 +120,7 @@ class TricksController extends AbstractController
     }
 
 
-    // Single Trick 
+  /* ***********************Show single trick page*************************** */
     #[Route('/tricks/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_trick')]
     public function trick($id, 
                           Request $request, 
@@ -144,7 +139,6 @@ class TricksController extends AbstractController
 
         // Create comment
         $user = $this->getUser();
-
         $comment = new Comment();
         $form = $this->createForm(CommentFromType::class, $comment);
         $form->handleRequest($request);
@@ -160,9 +154,6 @@ class TricksController extends AbstractController
 
             return $this->redirectToRoute('app_trick', array('slug' =>$this->slugger->slug($trick->getTitle()), 'id'=>$id ));
         }
-
-
-
         return $this->render('tricks/trick.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
@@ -172,8 +163,7 @@ class TricksController extends AbstractController
     }
 
 
-
-    // Update
+    /* ***********************Update one trick page*************************** */
     #[Route('/tricks/update/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_update')]
     public function update($id, Request $request): Response
     {
@@ -204,7 +194,7 @@ class TricksController extends AbstractController
         ]);
     }
 
-    // Delete 
+  /* ***********************Delete one trick page*************************** */
     #[Route('/tricks/delete/{slug}/{id}', methods: ['GET', 'DELETE'], name: 'app_delete')]
     public function delete($id): Response
     {
@@ -233,10 +223,7 @@ class TricksController extends AbstractController
                     }
                   
                 }
-            }
-            
-           
-         
+            }     
             $this->em->remove($trick);
             $this->em->flush();
             return $this->redirectToRoute('app_home');

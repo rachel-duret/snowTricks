@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
             //send an email
             $userEmail = $form->get('email')->getData();
             $email = (new Email())
-                ->from('no-reply@snowtricks.com')
+                ->from($this->getParameter('app.email'))
                 ->to($userEmail)
                 ->subject('Activate Account')
                 ->html("<p>$url</p>");

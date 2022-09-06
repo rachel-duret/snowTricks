@@ -20,6 +20,7 @@ class ProfileController extends AbstractController
         private TrickRepository $trickRepository
     ) {
     }
+    /* ************************ Profile page*********************************** */
     #[Route('/profile/{id}/{username}', methods: ['GET'], name: 'app_profile')]
     public function index($id): Response
     {
@@ -28,7 +29,7 @@ class ProfileController extends AbstractController
             $tricks = $this->trickRepository->findby(['user' => $id]);
 
 
-            return $this->render('profile/index.html.twig', [
+            return $this->render('profile/profile.html.twig', [
                 'controller_name' => 'ProfileController',
                 'user' => $user,
                 'tricks' => $tricks
@@ -38,6 +39,7 @@ class ProfileController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
+    /* ************************ Update profile page*********************************** */
     #[Route('/profile/update/{id}/{username}', methods: ['GET', 'POST'], name: 'app_profile_update')]
     public function profileUpdate($id, Request $request): Response
     {
@@ -66,10 +68,7 @@ class ProfileController extends AbstractController
                     $this->addFlash('success', 'Your profile already update .');
                     return $this->redirectToRoute('app_profile', array('id' => $user->getId(), 'username' => $user->getUsername()));
                 }
-
             }
-
-
 
             return $this->render('profile/update.html.twig', [
                 'form' => $form->createView(),

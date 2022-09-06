@@ -11,7 +11,6 @@ use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -30,6 +29,7 @@ class FileController extends AbstractController
         private SluggerInterface $slugger
     ) {
     }
+    /* ************************Upload more files ****************************************************** */
     #[Route('/upload_file/{slug}/{id}', methods: ['GET', 'POST'], name: 'app_upload_file')]
     public function index(Request $request, $id): Response
     {
@@ -38,9 +38,9 @@ class FileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $imagePath = $form->get('image')->getData();
 
+            // Check is there image path 
             if ($imagePath) {
                 $newFileName = uniqid() . '.' . $imagePath->guessExtension();
                 try {
@@ -80,17 +80,18 @@ class FileController extends AbstractController
                 $video->setTrick($trick);
                 $this->em->persist($video);
 
+                // save file data to databse
                 $this->em->flush();
 
                 return $this->redirectToRoute('app_trick', array('slug' => $this->slugger->slug($trick->getTitle()), 'id' => $id));
             }
         }
-        return $this->render('file/index.html.twig', [
+        return $this->render('file/upload.html.twig', [
             'fileForm' => $form->createView()
         ]);
     }
 
-    //update image
+/* ****************************Update one image ****************************************************** */
     #[Route("/update_image/{id}",  name: "app_update_image")]
     public function updateImageFile($id, Request $request): Response
     {
@@ -110,7 +111,7 @@ class FileController extends AbstractController
                         $fileName);
                 }
 
-                // New image path
+                //  create new image path
                 if ($newImagePath) {
                     $newFileName = uniqid() . '.' . $newImagePath->guessExtension();
                     try {
@@ -133,15 +134,13 @@ class FileController extends AbstractController
             return $this->redirectToRoute('app_trick', array('slug' => $this->slugger->slug($trick->getTitle()), 'id' => $trick->getId()));
         }
 
-
-
         return $this->render('file/update_image.html.twig', [
             'imageForm' => $form->createView(),
         ]);
     }
 
 
-    // Delet one image 
+ /* ****************************Delete one image ****************************************************** */
     #[Route("/delete_image/{id}", methods: ['GET', 'DELETE'], name: "app_delete_image")]
     public function deleteImageFile($id): Response
     {
@@ -157,7 +156,7 @@ class FileController extends AbstractController
             $fileSystem->remove($this->getParameter('kernel.project_dir') . '/public' .
                 $fileName);
             $this->em->remove($image);
-            if ($fileName === $trick->getMainPicture());{
+            if ($fileName === $trick->getMainPicture()); {
                 $trick->setMainPicture(null);
             }
             $this->em->flush();
@@ -168,7 +167,7 @@ class FileController extends AbstractController
     }
 
 
-    //update video
+/* ****************************Update one video ****************************************************** */
     #[Route("/update_video/{id}",  name: "app_update_video")]
     public function updateVideoFile($id, Request $request): Response
     {
@@ -234,7 +233,7 @@ class FileController extends AbstractController
         return $this->redirectToRoute('app_trick', array('slug' => $this->slugger->slug($trick->getTitle()), 'id' => $trick->getId()));
     }
 
-    // Delete video
+/* ****************************Delete one video ****************************************************** */
     #[Route("/delete_video/{id}", methods: ['GET', 'DELETE'], name: "app_delete_video")]
     public function deleteVideoFile($id): Response
     {
@@ -267,7 +266,7 @@ class FileController extends AbstractController
         return $this->redirectToRoute('app_trick', array('slug' => $this->slugger->slug($trick->getTitle()), 'id' => $trick->getId()));
     }
 
-    // Main picture setting of trick
+/* *********************** Setting main picture ************************************************** */
     #[Route("/trick/main_picture/{id}", methods: ['GET'], name: 'app_trick_main_picture')]
     public function trickMainPicture($id)
     {

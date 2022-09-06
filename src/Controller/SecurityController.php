@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ActivateAccountFormType;
 use App\Form\ForgottenPasswordFormType;
 use App\Form\ResetPasswordFormType;
@@ -24,6 +23,7 @@ class SecurityController extends AbstractController
     public function __construct(private EntityManagerInterface $em, private UserRepository $userRepository)
     {
     }
+    /* ************************ Login page*********************************** */
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
@@ -44,8 +44,7 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    // Activate account
-
+    /* ************************ Activate account page*********************************** */
     #[Route('/activate_account/{token}',  name: 'app_activate_account')]
     public function activateAccount($token, Request $request): Response
     {
@@ -72,13 +71,13 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-
-    // Reactivate account
-    #[Route('/reactivate_account', name:'app_reactivate_account')]
-    public function reactivateAccount( Request $request,
-                                       TokenGeneratorInterface $tokenGeneratorInterface,
-                                       MailerInterface $mailer):Response
-    {
+    /* ************************ Reactivate accountpage*********************************** */
+    #[Route('/reactivate_account', name: 'app_reactivate_account')]
+    public function reactivateAccount(
+        Request $request,
+        TokenGeneratorInterface $tokenGeneratorInterface,
+        MailerInterface $mailer
+    ): Response {
         $form = $this->createForm(ForgottenPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -88,17 +87,17 @@ class SecurityController extends AbstractController
 
             // Generate a new token
             if ($user) {
-                if ($user->isIsVerified()){
-                $this->addFlash('danger', 'Your account already activated Please login!');
+                if ($user->isIsVerified()) {
+                    $this->addFlash('danger', 'Your account already activated Please login!');
                     return $this->redirectToRoute('app_login');
                 }
-                $token=$user->getToken();
+                $token = $user->getToken();
                 //send a link to reset password
                 $url = $this->generateUrl('app_activate_account', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                 // create data for email
                 $context = compact('url', 'user');
                 $mail = (new Email())
-                    ->from('no-reply@snowtricks.com')
+                    ->from($this->getParameter('app.email'))
                     ->to($email)
                     ->subject('Ractivate Account')
                     ->html("<p>$url</p>");
@@ -111,12 +110,12 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/reactivate_account.html.twig',[
+        return $this->render('security/reactivate_account.html.twig', [
             'reactivateAccountForm' => $form->createView()
         ]);
     }
 
-    /* ***********************Forgotten Password*************************** */
+    /* ***********************Forgotten Password page*************************** */
     #[Route('/forgotten_password', name: 'app_forgotten_password')]
     public function token(
         Request $request,
@@ -142,7 +141,7 @@ class SecurityController extends AbstractController
                 // create data for email
                 $context = compact('url', 'user');
                 $mail = (new Email())
-                    ->from('no-reply@snowtricks.com')
+                    ->from($this->getParameter('app.email'))
                     ->to($email)
                     ->subject('Reset Password')
                     ->html("<p>$url</p>");
@@ -161,6 +160,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /* ***********************Reset Password page*************************** */
     #[Route('/reset_password/{token}', name: 'app_reset_password')]
     public function resetPassword(
         string $token,
