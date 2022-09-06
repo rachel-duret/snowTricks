@@ -218,7 +218,7 @@ class TricksController extends AbstractController
             if ($videos) {
                 foreach ($videos as $video) {
                     $videoFileName = $video->getVideoPath();
-                    if ($videoFileName != null){
+                    if ($videoFileName !== null){
                         $fileSystem->remove( $public_dir.$videoFileName);
                     }
                   

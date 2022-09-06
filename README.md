@@ -9,18 +9,18 @@ This project is for developing the site web of snowbord tricks . The project
 objective is the creation of a collaborative site to make this sport known to
 the general public and help in learning tricks of snowbord.
 
-### This project needs:
+### This project needs
 
 Here is the list of fonctions that should be accessible from your website:
 
-- Fonction to show all list of tricks;
-- Fonction to displaying a trick with all information images media and comments;
-- Function to adding a trick include adding image, video;
-- Function to editing a trick include adding image, video;
-- Function to deleting a trick include delete image, video;
-- Function to editing a sigle image or video;
-- Function to deleting a sigle image or video;
-- User login/registration functions .
+- Fonction to show all list of tricks
+- Fonction to displaying a trick with all information images media and comments
+- Function to adding a trick include adding image, video
+- Function to editing a trick include adding image, video
+- Function to deleting a trick include delete image, video
+- Function to editing a sigle image or video
+- Function to deleting a sigle image or video
+- User login/registration functions
 
 ## Built With
 

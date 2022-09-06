@@ -105,7 +105,6 @@ class SecurityController extends AbstractController
                 $this->addFlash('success', 'Email already send. please check your email !');
                 return $this->redirectToRoute('app_login');
             }
-            //$this->addFlash('danger', 'User do not exist .');
             $this->addFlash('danger', 'User does not exist !');
             return $this->redirectToRoute('app_login');
         }
