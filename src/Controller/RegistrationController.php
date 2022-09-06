@@ -38,6 +38,7 @@ class RegistrationController extends AbstractController
             );
             //Generate token
             $token = $tokenGeneratorInterface->generateToken();
+            $user->setRoles(['ROLE_USER']);
             $user->setToken($token);
             $user->setIsVerified(false);
 
