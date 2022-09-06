@@ -19,6 +19,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick->setUser($this->getReference('user_0'));
         $trick->setCategory($this->getReference('category_0'));
         $trick->setTitle('air');
+        $trick->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick->setDescription('A front jump, one of the basics.1.
         Accelerate, riding straight on a flat board.
         2.
@@ -37,6 +38,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick1->setUser($this->getReference('user_0'));
         $trick1->setCategory($this->getReference('category_0'));
         $trick1->setTitle('nollie');
+        $trick1->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick1->setDescription('A jump you make by springing off the nose of the board.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick1->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick1);
@@ -46,6 +48,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick2->setUser($this->getReference('user_0'));
         $trick2->setCategory($this->getReference('category_0'));
         $trick2->setTitle('frontflip');
+        $trick2->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick2->setDescription('Also called Tamedog. A cartwheel rotation over your leading shoulder performed from nollie.How do it
         The frontflip is one of the easiest flips on the snowboard.
         1.
@@ -64,6 +67,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick3->setUser($this->getReference('user_0'));
         $trick3->setCategory($this->getReference('category_1'));
         $trick3->setTitle('nose');
+        $trick3->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick3->setDescription('Front hand grabs the nose of the board.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick3->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick3);
@@ -72,6 +76,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick4->setUser($this->getReference('user_0'));
         $trick4->setCategory($this->getReference('category_1'));
         $trick4->setTitle('mute');
+        $trick4->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick4->setDescription('Front hand grabs toe edge between the bindings.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick4->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick4);
@@ -80,6 +85,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick5->setUser($this->getReference('user_0'));
         $trick5->setCategory($this->getReference('category_1'));
         $trick5->setTitle('melon');
+        $trick5->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick5->setDescription('Front hand grabs the heel edge between the bindings.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick5->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick5);
@@ -88,6 +94,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick6->setUser($this->getReference('user_0'));
         $trick6->setCategory($this->getReference('category_2'));
         $trick6->setTitle('fs boarfslide');
+        $trick6->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick6->setDescription('Sliding down the obstacle with your board into a 90° position to the rail, facing uphill. Rail is between your bindings. You bring the nose over the rail during entry.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick6->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick6);
@@ -96,6 +103,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick7->setUser($this->getReference('user_0'));
         $trick7->setCategory($this->getReference('category_2'));
         $trick7->setTitle('fs lipslide');
+        $trick7->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick7->setDescription('A slide in which you bring the tail over the rail during entry.
         1.
         Ride up just like you would doing a FS 50‑50.
@@ -110,6 +118,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick8->setUser($this->getReference('user_0'));
         $trick8->setCategory($this->getReference('category_3'));
         $trick8->setTitle('hand plant');
+        $trick8->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick8->setDescription('A mainstay of snowboarding photography.
         1.
         First off, you need to find a good quarter. You speed in the quarter should be high enough to perform a small backside jump.
@@ -126,6 +135,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick9->setUser($this->getReference('user_0'));
         $trick9->setCategory($this->getReference('category_3'));
         $trick9->setTitle('tail');
+        $trick9->setMainPicture('/images/tricks/flat/butter/butter.jpg');
         $trick9->setDescription('Pressuring either the nose or tail so that the opposite end lifts off of the snow, allowing for a pivot-like spin while riding down the hill.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo reprehenderit expedita veritatis distinctio ad hic quasi beatae rem possimus? Perferendis perspiciatis mollitia sed dolor libero necessitatibus dolorum dicta facere doloremque voluptates, quae voluptatem aliquam officia? Modi voluptates quo fugiat temporibus, eaque rerum nisi iste omnis iusto pariatur a maiores exercitationem quod cumque sed quam tempora libero magni, consequuntur sunt ratione qui quidem laudantium. Porro assumenda dolor illo nulla itaque, nam doloremque. Veniam explicabo magni repellendus tenetur dolor facere debitis dolore, quasi laudantium! Pariatur delectus illum earum eveniet. Aspernatur, alias expedita! Facilis praesentium eaque dicta expedita corporis consequuntur quae debitis. In.');
         $trick9->setcreatedAt(new DateTimeImmutable());
         $manager->persist($trick9);

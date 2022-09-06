@@ -51,7 +51,7 @@
 													<div class="carousel-item active" style="height:200px;">
 														{% if app.user and app.user is same as trick.user %}
 															<div class="position-absolute p-2 top-0 end-0 " style=" z-index: 9999;">
-																<a href="{{path('app_trick_main_picture', {id: image.id})}}" class="btn btn-light mx-3">Set to be main picture
+																<a href="{{path('app_trick_main_picture', {id: image.id})}}" class="btn btn-light mx-3">Main picture
 																</a>
 															</div>
 
@@ -62,7 +62,7 @@
 												{% endfor %}
 											{% endif %}
 											{# default image #}
-											<img src="https://ucarecdn.com/61b6d3e4-8c84-40b9-9f05-6af61d1bce37/-/sharp/3/-/format/jpeg/-/progressive/yes/-/quality/normal/-/scale_crop/622x544/center/" class="d-block w-100 rounded " alt="{{ trick.title }}">
+											<img src="{{asset('images/no-image.jpg')}} " alt="{{ trick.title }}">
 
 
 										</div>
@@ -104,6 +104,8 @@
 
 													</div>
 												{% endfor %}
+												{# default image for video #}
+												<img src="{{asset('images/no-video.jpg')}} " alt="{{ trick.title }}">
 
 											</div>
 											<button class="carousel-control-prev" type="button" data-bs-target="#carouselVideoControls" data-bs-slide="prev">

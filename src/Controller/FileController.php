@@ -157,6 +157,9 @@ class FileController extends AbstractController
             $fileSystem->remove($this->getParameter('kernel.project_dir') . '/public' .
                 $fileName);
             $this->em->remove($image);
+            if ($fileName === $trick->getMainPicture());{
+                $trick->setMainPicture(null);
+            }
             $this->em->flush();
             return $this->redirectToRoute('app_trick', array('slug' => $this->slugger->slug($trick->getTitle()), 'id' => $trick->getId()));
         }
