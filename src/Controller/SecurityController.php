@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     }
     /* ************************ Login page*********************************** */
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
         // get the login error if there is one
@@ -38,6 +38,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+       /* ************************ Logout page*********************************** */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
@@ -95,7 +96,6 @@ class SecurityController extends AbstractController
                 //send a link to reset password
                 $url = $this->generateUrl('app_activate_account', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                 // create data for email
-                $context = compact('url', 'user');
                 $mail = (new Email())
                     ->from($this->getParameter('app.email'))
                     ->to($email)
@@ -138,7 +138,6 @@ class SecurityController extends AbstractController
                 //send a link to reset password
                 $url = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                 // create data for email
-                $context = compact('url', 'user');
                 $mail = (new Email())
                     ->from($this->getParameter('app.email'))
                     ->to($email)
@@ -148,7 +147,6 @@ class SecurityController extends AbstractController
                 $this->addFlash('success', 'Email already send. please check your email !');
                 return $this->redirectToRoute('app_login');
             }
-            //$this->addFlash('danger', 'User do not exist .');
             $this->addFlash('danger', 'User does not exist !');
             return $this->redirectToRoute('app_login');
         }
